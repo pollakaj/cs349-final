@@ -1,31 +1,53 @@
 package characters;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.geom.Path2D;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
-import visual.statik.described.CompositeContent;
+import java.awt.image.BufferedImage;
 
-public class Bernie extends CompositeContent
+import visual.statik.SimpleContent;
+
+public class Bernie implements SimpleContent
 {
-  public Bernie()
+  private BufferedImage image;
+  private int x;
+  private int y;
+  
+  public Bernie(BufferedImage image, int x, int y)
   {
-    super();
-    Color black = Color.BLACK;
-    Color gold = new Color(207, 181, 59);
-    Color silver = new Color(165, 169, 180);
-    Color red = Color.RED;
-    
-    BasicStroke stroke = new BasicStroke();
-    createBernie();
+    this.image = image;
+    this.x = x;
+    this.y = y;
+  }
+
+  
+  @Override
+  public void render(Graphics g)
+  {
+    Graphics2D g2 = (Graphics2D) g;
+    double imageY = y - image.getHeight() / 2;
+    double imageX = x - image.getWidth() / 2;
+    g2.drawImage(image, (int) imageX, (int) imageY, null);
   }
   
-  private void createBernie()
+  public void setX(int updateX)
   {
-    Path2D.Float shape = new Path2D.Float();
-    shape.moveTo(20, 50);
-    shape.moveTo(20, 100);
-    
+    x = updateX;
+  }
+  
+  public void setY(int updateY)
+  {
+    y = updateY;
+  }
+  
+  public int getX()
+  {
+    return x;
+  }
+  
+  public int getY()
+  {
+    return y;
   }
 
 }
