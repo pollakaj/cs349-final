@@ -19,6 +19,7 @@ import javax.swing.JPanel;
  */
 
 //Add Shadows so he does not look detached
+//add blue to background image
 public class MainWindow extends JFrame implements KeyListener, ComponentListener
 {
   private static final long serialVersionUID = 1L;
