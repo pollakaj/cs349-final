@@ -18,7 +18,7 @@ import javax.swing.JPanel;
  * @version 1.0
  */
 
-
+//Add Shadows so he does not look detached
 public class MainWindow extends JFrame implements KeyListener, ComponentListener
 {
   private static final long serialVersionUID = 1L;
