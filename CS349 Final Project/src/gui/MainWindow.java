@@ -30,9 +30,11 @@ public class MainWindow extends JFrame implements KeyListener, ComponentListener
   private int bernieX;
   private int bernieY;
   private int bernieVel = 5;
-  private int jumpHeight = 50;
-  private int jumpSpeed = 8;
+  private int jumpHeight = 100;
+  private int jumpSpeed = 10;
   private boolean isJumping = false;
+  private boolean isDescending = false;
+  private int startY;
     
   public MainWindow() throws IOException 
   {
@@ -58,21 +60,23 @@ public class MainWindow extends JFrame implements KeyListener, ComponentListener
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         g.drawImage(bernie, bernieX, bernieY, 100, 150, this);
         
-        if (isJumping) {
-          bernieY -= jumpSpeed;
-          jumpHeight -= jumpSpeed;
-
-          if (jumpHeight <= 0) {
-              jumpSpeed = -8;
+        if (isJumping)
+        {
+          if (!isDescending)
+          {
+            bernieY -= jumpSpeed;
+            if (bernieY <= startY - jumpHeight) isDescending = true;;
           }
-
-          if (bernieY >= getHeight() - 150) {
+          else
+          {
+            bernieY += jumpSpeed;
+            if (bernieY >= startY)
+            {
               isJumping = false;
-              jumpHeight = 50; // Reset jump height
-              jumpSpeed = 8; // Reset jump speed
-              bernieY = getHeight() - 200;
+              isDescending = false;
+            }
           }
-      }
+        }
       }
             
       @Override
@@ -106,8 +110,7 @@ public class MainWindow extends JFrame implements KeyListener, ComponentListener
         bernieX += bernieVel;
     } else if (code == KeyEvent.VK_SPACE && !isJumping) {
         isJumping = true;
-        jumpHeight = 50; // Reset jump height
-        jumpSpeed = 8; // Reset jump speed
+        startY = bernieY;
     }
 
     if (bernieX < 0) {
