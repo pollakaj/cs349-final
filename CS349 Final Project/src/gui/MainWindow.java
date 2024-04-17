@@ -1,6 +1,8 @@
 package gui;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /**
  * MainWindow class to create the main window of the videogame.
@@ -20,7 +23,7 @@ import javax.swing.JPanel;
 
 //Add Shadows so he does not look detached
 //add blue to background image
-public class MainWindow extends JFrame implements KeyListener, ComponentListener
+public class MainWindow extends JFrame implements KeyListener, ActionListener
 {
   private static final long serialVersionUID = 1L;
   private static final int HEIGHT = 600;
@@ -30,9 +33,11 @@ public class MainWindow extends JFrame implements KeyListener, ComponentListener
   private BufferedImage bernie;
   private int bernieX;
   private int bernieY;
-  private int bernieVel = 5;
+  private int bernieVelx = 0;
+  private int bernieVely = 0;
   private int jumpHeight = 100;
   private int jumpSpeed = 10;
+  private Timer time = new Timer(5, this);
   private boolean isJumping = false;
   private boolean isDescending = false;
   private int startY;
@@ -86,9 +91,10 @@ public class MainWindow extends JFrame implements KeyListener, ComponentListener
         return new Dimension(WIDTH, HEIGHT);
       }
     });
+    time.start();
     addKeyListener(this);
-    addComponentListener(this);
     setFocusable(true);
+    setFocusTraversalKeysEnabled(false);
   }
   public static void main(String[] args) throws IOException
   {
@@ -106,9 +112,11 @@ public class MainWindow extends JFrame implements KeyListener, ComponentListener
   {
     int code = e.getKeyCode();
     if (code == KeyEvent.VK_LEFT) {
-        bernieX -= bernieVel;
+        bernieVelx = -1;
+        bernieVely = 0;
     } else if (code == KeyEvent.VK_RIGHT) {
-        bernieX += bernieVel;
+        bernieVelx = 1;
+        bernieVely = 0;
     } else if (code == KeyEvent.VK_SPACE && !isJumping) {
         isJumping = true;
         startY = bernieY;
@@ -126,32 +134,28 @@ public class MainWindow extends JFrame implements KeyListener, ComponentListener
   @Override
   public void keyReleased(KeyEvent e)
   {
-    
-  }
-  @Override
-  public void componentResized(ComponentEvent e)
-  {
-    bernieX = getWidth() / 8;
-    bernieY = getHeight() / 2 + 50;
-    repaint(); 
+    bernieVelx = 0;
+    bernieVely = 0;
   }
 
   @Override
-  public void componentMoved(ComponentEvent e)
+  public void actionPerformed(ActionEvent e)
   {
-    // TODO Auto-generated method stub
+    if (bernieX < 0)
+    {
+      bernieVelx = 0;
+      bernieX = 0;
+    }
     
-  }
-  @Override
-  public void componentShown(ComponentEvent e)
-  {
-    // TODO Auto-generated method stub
-    
-  }
-  @Override
-  public void componentHidden(ComponentEvent e)
-  {
-    // TODO Auto-generated method stub
+    if (bernieX > 1000)
+    {
+      bernieVelx = 0;
+      bernieX = 800;
+    }
+
+    bernieX = bernieX + bernieVelx;
+    bernieY = bernieY + bernieVely;
+    repaint();
     
   }
 }
