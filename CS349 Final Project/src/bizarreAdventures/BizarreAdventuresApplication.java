@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 import app.JApplication;
+import characters.Bernie;
 import io.ResourceFinder;
 import resources.Marker;
 import visual.VisualizationView;
@@ -42,12 +43,17 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     ResourceFinder rf = ResourceFinder.createInstance(new Marker());
     ContentFactory factory = new ContentFactory(rf);
     Stage stage = new Stage(50);
+    
+    Bernie b = new Bernie();
     Content background = factory.createContent("349 Background.png", 3, false);
     stage.add(background);
+    stage.add(b);
     VisualizationView stageView = stage.getView(); 
     stageView.setBounds(0, 0, WIDTH, HEIGHT);
+    
     Content platform = factory.createContent("large_platform.png", 4, false);
     stage.add(platform);
+    
     JPanel contentPane = (JPanel)this.getContentPane();
     contentPane.add(stageView);
     stage.start();
