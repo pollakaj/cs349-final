@@ -71,7 +71,6 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     ContentFactory factory = new ContentFactory(rf);
     Stage stage = new Stage(50);
     
-    
     Bernie b = new Bernie();
     Content background = factory.createContent("349 Background.png", 3, false);
     stage.add(background);
