@@ -1,6 +1,5 @@
 package bizarreAdventures;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -50,7 +49,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     stage.add(b);
     VisualizationView stageView = stage.getView(); 
     stageView.setBounds(0, 0, WIDTH, HEIGHT);
-    
+    stageView.addKeyListener(b);
     Content platform = factory.createContent("large_platform.png", 4, false);
     stage.add(platform);
     

@@ -14,10 +14,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import io.ResourceFinder;
+import visual.dynamic.described.RuleBasedSprite;
 import visual.dynamic.described.SampledSprite;
 import visual.statik.sampled.*;
 
-public class Bernie extends SampledSprite implements KeyListener, ActionListener
+public class Bernie extends RuleBasedSprite implements KeyListener, ActionListener
 {
   private static final int SPEED = 5;
   private static final int JUMP_HEIGHT = 100;
@@ -28,7 +29,7 @@ public class Bernie extends SampledSprite implements KeyListener, ActionListener
 
   public Bernie()
   {
-    super();
+    super(new Content());
     BufferedImage bernie = null;
     try
     {
@@ -46,19 +47,11 @@ public class Bernie extends SampledSprite implements KeyListener, ActionListener
     finder = ResourceFinder.createInstance(new resources.Marker());
     factory = new ContentFactory(finder);
     content = factory.createContent(bernie);
-    this.content.add(content);
-    this.setLocation(startX, startY);
+    this.content = content;
+    this.setLocation(100, 650);
     this.setVisible(true);
-    addKeyTime(0, 164, 210, content);
-    this.setEndState(REMAIN);
   }
-  
-  private void addKeyTime(int time, int x, int y, Content content)
-  {
-    addKeyTime(time*1000, new Point2D.Double((double)x, (double)y), null, 1.0,
-        content);
-  }
-  
+
   private BufferedImage resizeImage(BufferedImage originalImage,
       int targetWidth, int targetHeight)
   {
@@ -88,12 +81,25 @@ public class Bernie extends SampledSprite implements KeyListener, ActionListener
   @Override
   public void keyPressed(KeyEvent e)
   {
+    int code = e.getKeyCode();
+    if (code == KeyEvent.VK_LEFT)
+    {
+      this.x -= SPEED;
+    } else if (code == KeyEvent.VK_RIGHT)
+    {
+      this.x += SPEED;
+    }  
+  }
+
+  @Override
+  public void keyReleased(KeyEvent e)
+  {
     // TODO Auto-generated method stub
     
   }
 
   @Override
-  public void keyReleased(KeyEvent e)
+  public void handleTick(int arg0)
   {
     // TODO Auto-generated method stub
     
