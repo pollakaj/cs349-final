@@ -20,6 +20,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
 {
   private static final int SPEED = 5;
   private static final int JUMP_HEIGHT = 100;
+  private long jumpTime = 200;
   private boolean isJumping = false;
   private int jumpCounter = 0;
   private int startY = 650;
@@ -83,10 +84,15 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     if (code == KeyEvent.VK_LEFT)
     {
       this.x -= SPEED;
-    } else if (code == KeyEvent.VK_RIGHT)
+    }
+    if (code == KeyEvent.VK_RIGHT)
     {
       this.x += SPEED;
     }  
+    if (code == KeyEvent.VK_SPACE)
+    {
+      isJumping = true;
+    }
   }
 
   @Override
@@ -101,5 +107,10 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   {
     // TODO Auto-generated method stub
     
+  }
+  
+  public boolean jumpGet()
+  {
+    return isJumping;
   }
 }
