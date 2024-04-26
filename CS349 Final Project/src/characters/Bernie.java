@@ -18,11 +18,12 @@ import visual.statik.sampled.*;
 
 public class Bernie extends RuleBasedSprite implements KeyListener, ActionListener
 {
-  private static final int SPEED = 5;
-  private static final int JUMP_HEIGHT = 100;
-  private long jumpTime = 200;
+  private static final int SPEED = 8;
+  private static final double GRAVITY = 1.5;
+  private static final double INIT_JUMP_SPD = -25.0;
+  
+  private double jumpSpeed = INIT_JUMP_SPD;
   private boolean isJumping = false;
-  private int jumpCounter = 0;
   private int startY = 650;
   private int startX = 100;
 
@@ -89,7 +90,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     {
       this.x += SPEED;
     }  
-    if (code == KeyEvent.VK_SPACE)
+    if (code == KeyEvent.VK_SPACE && !isJumping && this.y == startY)
     {
       isJumping = true;
     }
@@ -105,12 +106,29 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   @Override
   public void handleTick(int arg0)
   {
-    // TODO Auto-generated method stub
+    if (isJumping)
+    {
+      jumpSpeed += GRAVITY;
+      this.y += jumpSpeed;
+      
+      if (jumpSpeed >= 0 && this.y >= startY)
+      {
+        isJumping = false;
+        this.y = startY;
+        jumpSpeed = INIT_JUMP_SPD;
+      }
+    } else
+    {
+      if (this.y < startY)
+      {
+        jumpSpeed += GRAVITY;
+        this.y += jumpSpeed;
+      } else
+      {
+        this.y = startY;
+        jumpSpeed = INIT_JUMP_SPD;
+      }
+    }
     
-  }
-  
-  public boolean jumpGet()
-  {
-    return isJumping;
   }
 }
