@@ -25,6 +25,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
 {
   public static final int WIDTH = 1920;
   public static final int HEIGHT = 1080;
+  private Stage stage;
 
   public BizarreAdventuresApplication(final String[] args)
   {
@@ -69,7 +70,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     
 
     ContentFactory factory = new ContentFactory(rf);
-    Stage stage = new Stage(50);
+    stage = new Stage(50);
     
     Bernie b = new Bernie();
     Content background = factory.createContent("349 Background.png", 3, false);
