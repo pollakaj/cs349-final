@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 
 import com.sun.tools.javac.Main;
 
+import Components.Platform;
 import app.JApplication;
 import auditory.sampled.BufferedSound;
 import auditory.sampled.BufferedSoundFactory;
@@ -92,8 +93,8 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     VisualizationView stageView = stage.getView(); 
     stageView.setBounds(0, 0, WIDTH, HEIGHT);
     stageView.addKeyListener(b);
-    Content platform = factory.createContent("large_platform.png", 4, false);
-    platform.setLocation(200, 600);
+    
+    Platform platform = new Platform(700, 400);
     stage.add(platform);
     
     JPanel contentPane = (JPanel)this.getContentPane();

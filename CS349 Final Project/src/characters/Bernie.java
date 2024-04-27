@@ -48,16 +48,16 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     super(new Content());
     try
     {
-      bernie = ImageIO.read(new File("src/resources/Bern.png"));
+      bernie = ImageIO.read(getClass().getResourceAsStream("/resources/Bern.png"));
       bernie = resizeImage(bernie, 125, 150);
       
-      leftBernie = ImageIO.read(new File("src/resources/bern_left.png"));
+      leftBernie = ImageIO.read(getClass().getResourceAsStream("/resources/bern_left.png"));
       leftBernie = resizeImage(leftBernie, 125, 150);
 
-      slice1 = ImageIO.read(new File("src/resources/Bern(slice1).png"));
+      slice1 = ImageIO.read(getClass().getResourceAsStream("/resources/Bern(slice1).png"));
       slice1 = resizeImage(slice1, 125, 150);
       
-      slice2 = ImageIO.read(new File("src/resources/Bern(slice2).png"));
+      slice2 = ImageIO.read(getClass().getResourceAsStream("/resources/Bern(slice2).png"));
       slice2 = resizeImage(slice2, 125, 150);
     }
     catch (IOException e)
