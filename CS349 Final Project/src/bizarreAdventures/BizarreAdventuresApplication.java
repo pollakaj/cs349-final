@@ -94,8 +94,26 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     stageView.setBounds(0, 0, WIDTH, HEIGHT);
     stageView.addKeyListener(b);
     
-    Platform platform = new Platform(700, 400);
+    Platform platform = new Platform(700, 600, b);
     stage.add(platform);
+    Platform platform1 = new Platform(300, 600, b);
+    stage.add(platform1);
+    Platform platform2 = new Platform(1200, 600, b);
+    stage.add(platform2);
+    Platform platform3 = new Platform(1500, 600, b);
+    stage.add(platform3);
+    Platform platform4 = new Platform(900, 400, b);
+    stage.add(platform4);
+    Platform platform5 = new Platform(500, 400, b);
+    stage.add(platform5);
+    Platform platform6 = new Platform(1500, 400, b);
+    stage.add(platform6);
+    Platform platform7 = new Platform(1700, 400, b);
+    stage.add(platform7);
+    Platform platform8 = new Platform(100, 200, b);
+    stage.add(platform8);
+    Platform platform9 = new Platform(200, 300, b);
+    stage.add(platform9);
     
     JPanel contentPane = (JPanel)this.getContentPane();
     contentPane.add(stageView);

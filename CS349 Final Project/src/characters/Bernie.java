@@ -38,6 +38,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private boolean isJumping = false;
   private boolean movingLeft = false;
   private boolean movingRight = false;
+  private boolean isTouchingPlatform = false;
   private int startY = 650;
   private SampledSprite slicingBern;
   private Content content2;
@@ -177,5 +178,23 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
       }
     }
     
+  }
+
+  public double getX()
+  {
+    return this.x;
+  }
+  
+  public double getY()
+  {
+    return this.y;
+  }
+  
+  public void setJumping(boolean jumping) {
+    isJumping = jumping;
+  }
+  
+  public void setTouchingPlatform(boolean touching) {
+    isTouchingPlatform = touching;
   }
 }

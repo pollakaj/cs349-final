@@ -2,12 +2,14 @@ package Components;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import characters.Bernie;
 import io.ResourceFinder;
 import resources.Marker;
 import visual.dynamic.described.RuleBasedSprite;
@@ -27,17 +29,24 @@ public class Platform extends RuleBasedSprite
   private ContentFactory factory;
   private BufferedImage platform;
   private Content content1;
+  private Bernie b;
+  private int x;
+  private int y;
 
-  public Platform(int x, int y)
+  public Platform(int x, int y, Bernie b)
   {
     super(new Content());
+    
+    this.b = b;
+    this.x = x;
+    this.y = y;
     
     try
     {
       platform = ImageIO.read(getClass().getResourceAsStream("/resources/large_platform.png"));
       platform = resizeImage(platform, 100, 100);
     }
-    catch (IOException e)
+     catch (IOException e)
     {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -56,7 +65,13 @@ public class Platform extends RuleBasedSprite
   @Override
   public void handleTick(int arg0)
   {
-    // TODO Auto-generated method stub
+    if (content1.getBounds2D().intersects(b.getBounds2D())) {
+      // Player is touching the platform
+      // Implement what happens when they touch the platform
+      b.setTouchingPlatform(true);
+      b.setLocation(b.getX(), getY() - 150);
+      b.setJumping(false);
+  }
     
   }
   
@@ -73,5 +88,12 @@ public class Platform extends RuleBasedSprite
     return outputImage;
   }
   
-
+  public int getX() {
+    return x;
+  }
+  
+  public int getY() {
+    return y;
+  }
+  
 }
