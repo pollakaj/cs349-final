@@ -2,13 +2,18 @@ package bizarreAdventures;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
+
+import com.sun.tools.javac.Main;
 
 import app.JApplication;
 import auditory.sampled.BufferedSound;
@@ -48,27 +53,35 @@ public class BizarreAdventuresApplication extends JApplication implements Action
   public void init()
   {
     ResourceFinder rf = ResourceFinder.createInstance(new Marker());
+    
+    
+    // Music Related Things
     BufferedSoundFactory buffFactory = new BufferedSoundFactory(rf);
-
-    BufferedSound backgroundMusic;
-    Clip clip = null;
-    
-    try {
-		backgroundMusic = buffFactory.createBufferedSound("background_music.mp3");
-		backgroundMusic.render(clip);
-		
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (UnsupportedAudioFileException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (LineUnavailableException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-    
-
+      
+    try
+    {
+      BufferedSound music = buffFactory.createBufferedSound("background_music.wav");
+      Clip clip = javax.sound.sampled.AudioSystem.getClip();
+      music.render(clip);
+      
+    }
+    catch (IOException e)
+    {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    catch (UnsupportedAudioFileException e)
+    {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    catch (LineUnavailableException e)
+    {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+   
+ 
     ContentFactory factory = new ContentFactory(rf);
     stage = new Stage(50);
     
