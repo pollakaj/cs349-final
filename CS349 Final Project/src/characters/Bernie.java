@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import io.ResourceFinder;
 import visual.dynamic.described.RuleBasedSprite;
 import visual.dynamic.described.SampledSprite;
+import visual.dynamic.described.TweeningSprite;
 import visual.statik.sampled.*;
 
 public class Bernie extends RuleBasedSprite implements KeyListener, ActionListener
@@ -23,6 +24,15 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private static final int SPEED = 9;
   private static final double GRAVITY = 4.0;
   private static final double INIT_JUMP_SPD = -40.0;
+  
+  private Content content1;
+  private Content leftContent;
+  private ResourceFinder finder;
+  private ContentFactory factory;
+  private BufferedImage bernie = null;
+  private BufferedImage leftBernie = null;
+  private BufferedImage slice1 = null;
+  private BufferedImage slice2 = null;
   
   private double jumpSpeed = INIT_JUMP_SPD;
   private boolean isJumping = false;
@@ -32,46 +42,40 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private SampledSprite slicingBern;
   private Content content2;
   private Content content3;
-  private Point2D local;
 
   public Bernie()
   {
     super(new Content());
-    BufferedImage bernie = null;
-    BufferedImage slice1 = null;
-    BufferedImage slice2 = null;
     try
     {
       bernie = ImageIO.read(new File("src/resources/Bern.png"));
       bernie = resizeImage(bernie, 125, 150);
       
+      leftBernie = ImageIO.read(new File("src/resources/bern_left.png"));
+      leftBernie = resizeImage(leftBernie, 125, 150);
+
       slice1 = ImageIO.read(new File("src/resources/Bern(slice1).png"));
-      slice1 = resizeImage(bernie, 125, 150);
+      slice1 = resizeImage(slice1, 125, 150);
       
       slice2 = ImageIO.read(new File("src/resources/Bern(slice2).png"));
-      slice2 = resizeImage(bernie, 125, 150);
+      slice2 = resizeImage(slice2, 125, 150);
     }
     catch (IOException e)
     {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    Content content;
-    ResourceFinder finder;
-    ContentFactory factory;
+
     finder = ResourceFinder.createInstance(new resources.Marker());
     factory = new ContentFactory(finder);
-    content = factory.createContent(bernie);
+    content1 = factory.createContent(bernie);
     content2 = factory.createContent(slice1);
     content3 = factory.createContent(slice2);
+    leftContent = factory.createContent(leftBernie);
     
-    local = new Point2D.Double(this.x, this.y);
     slicingBern = new SampledSprite();
-    slicingBern.addKeyTime(0, local, null, null, content);
-    
-    this.content = content;
-    slicingBern.setVisible(true);
-    this.addAntagonist(slicingBern);
+
+    this.content = content1;
     this.setLocation(100, 650);
     this.setVisible(true);
   }
@@ -109,10 +113,12 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     if (code == KeyEvent.VK_LEFT)
     {
       movingLeft = true;
+      this.content = leftContent;
     }
     if (code == KeyEvent.VK_RIGHT)
     {
       movingRight = true;
+      this.content = content1;
     }  
     if (code == KeyEvent.VK_SPACE && !isJumping && this.y == startY)
     {
@@ -120,8 +126,16 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     }
     if (code == KeyEvent.VK_X)
     {
-      slicingBern.addKeyTime(200, local, null, null, content2);
-      slicingBern.addKeyTime(400, local, null, null, content3);
+      slicingBern.setLocation(this.x, this.y);
+      slicingBern.addKeyTime(0, new Point2D.Double(this.x, this.y), null, null,
+          content1);
+      slicingBern.addKeyTime(200, new Point2D.Double(this.x, this.y), null,
+          null, content2);
+      slicingBern.addKeyTime(400, new Point2D.Double(this.x, this.y), null,
+          null, content3);
+      slicingBern.setEndState(TweeningSprite.REMOVE);
+      slicingBern.setVisible(true);
+      this.content = slicingBern;
     }
   }
 
