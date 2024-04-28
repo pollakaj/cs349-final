@@ -59,7 +59,8 @@ public class Spike extends RuleBasedSprite
   public void handleTick(int arg0)
   {
     if (content1.getBounds2D().intersects(b.getBounds2D())) {
-      // Player is touching the platform
+      // Player is touching the spike
+      b.die();
     }
   }
   

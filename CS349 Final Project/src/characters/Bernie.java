@@ -12,11 +12,17 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
+import auditory.sampled.BufferedSound;
+import auditory.sampled.BufferedSoundFactory;
 import io.ResourceFinder;
 import visual.dynamic.described.RuleBasedSprite;
 import visual.dynamic.described.SampledSprite;
 import visual.dynamic.described.TweeningSprite;
+import visual.dynamic.sampled.RectangleWipe;
 import visual.statik.sampled.*;
 
 public class Bernie extends RuleBasedSprite implements KeyListener, ActionListener
@@ -123,6 +129,30 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     }  
     if (code == KeyEvent.VK_SPACE && !isJumping && this.y == startY)
     {
+BufferedSoundFactory buffFactory = new BufferedSoundFactory(finder);
+      
+      try
+      {
+        BufferedSound music = buffFactory.createBufferedSound("boing.wav");
+        Clip clip = javax.sound.sampled.AudioSystem.getClip();
+        music.render(clip);
+        
+      }
+      catch (IOException exc)
+      {
+        // TODO Auto-generated catch block
+        exc.printStackTrace();
+      }
+      catch (UnsupportedAudioFileException exc)
+      {
+        // TODO Auto-generated catch block
+        exc.printStackTrace();
+      }
+      catch (LineUnavailableException exc)
+      {
+        // TODO Auto-generated catch block
+        exc.printStackTrace();
+      }
       isJumping = true;
     }
     if (code == KeyEvent.VK_X)
@@ -156,6 +186,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
 
     if (isJumping)
     {
+      
       jumpSpeed += GRAVITY;
       this.y += jumpSpeed;
       
@@ -196,5 +227,10 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   
   public void setTouchingPlatform(boolean touching) {
     isTouchingPlatform = touching;
+  }
+  
+  public void die() {
+    RectangleWipe recWipe = new RectangleWipe(1, 30);
+    setLocation(100, 650);
   }
 }
