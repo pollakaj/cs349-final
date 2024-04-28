@@ -8,7 +8,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -153,31 +152,33 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   {
     if (movingLeft) this.x -= SPEED;
     if (movingRight) this.x += SPEED;
-
-    if (isJumping)
+    
+    if (!isTouchingPlatform)
     {
-      jumpSpeed += GRAVITY;
-      this.y += jumpSpeed;
-      
-      if (jumpSpeed >= 0 && this.y >= startY)
-      {
-        isJumping = false;
-        this.y = startY;
-        jumpSpeed = INIT_JUMP_SPD;
-      }
-    } else
-    {
-      if (this.y < startY)
+      if (isJumping)
       {
         jumpSpeed += GRAVITY;
         this.y += jumpSpeed;
+        
+        if (jumpSpeed >= 0 && this.y >= startY)
+        {
+          isJumping = false;
+          this.y = startY;
+          jumpSpeed = INIT_JUMP_SPD;
+        }
       } else
       {
-        this.y = startY;
-        jumpSpeed = INIT_JUMP_SPD;
+        if (this.y < startY)
+        {
+          jumpSpeed += GRAVITY;
+          this.y += jumpSpeed;
+        } else
+        {
+          this.y = startY;
+          jumpSpeed = INIT_JUMP_SPD;
+        }
       }
-    }
-    
+    }  
   }
 
   public double getX()
@@ -190,6 +191,11 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     return this.y;
   }
   
+  public void setY(double yLocal)
+  {
+    this.y = yLocal;
+  }
+
   public void setJumping(boolean jumping) {
     isJumping = jumping;
   }

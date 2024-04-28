@@ -65,13 +65,22 @@ public class Platform extends RuleBasedSprite
   @Override
   public void handleTick(int arg0)
   {
-    if (content1.getBounds2D().intersects(b.getBounds2D())) {
-      // Player is touching the platform
-      // Implement what happens when they touch the platform
+    int margin = 10;
+    Rectangle2D bernieBounds = new Rectangle2D.Double(b.getX(), b.getY(),
+        b.getBounds2D().getWidth(), b.getBounds2D().getHeight());
+    Rectangle2D platformMargBounds = new Rectangle2D.Double(getX(), getY(),
+        content1.getBounds2D().getWidth(), content1.getBounds2D().getHeight());
+    
+    if (bernieBounds.intersects(platformMargBounds))
+    {
       b.setTouchingPlatform(true);
-      b.setLocation(b.getX(), getY() - 150);
-      b.setJumping(false);
-  }
+      double newY = platformMargBounds.getY() - bernieBounds.getHeight();
+      b.setY(newY);
+      b.setJumping(false);   
+    } else
+    {
+      b.setTouchingPlatform(false);
+    }
     
   }
   
