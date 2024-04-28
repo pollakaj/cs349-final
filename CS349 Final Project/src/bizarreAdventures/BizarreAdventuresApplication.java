@@ -2,20 +2,13 @@ package bizarreAdventures;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
-
-import com.sun.tools.javac.Main;
-
 import Components.Platform;
+import Components.Spike;
 import app.JApplication;
 import auditory.sampled.BufferedSound;
 import auditory.sampled.BufferedSoundFactory;
@@ -24,6 +17,7 @@ import io.ResourceFinder;
 import resources.Marker;
 import visual.VisualizationView;
 import visual.dynamic.described.Stage;
+import visual.statik.TransformableContent;
 import visual.statik.sampled.Content;
 import visual.statik.sampled.ContentFactory;
 
@@ -31,6 +25,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
 {
   public static final int WIDTH = 1920;
   public static final int HEIGHT = 1080;
+  private Bernie b;
   private Stage stage;
 
   public BizarreAdventuresApplication(final String[] args)
@@ -46,7 +41,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
   @Override
   public void actionPerformed(ActionEvent e)
   {
-    // TODO Auto-generated method stub
+    
     
   }
 
@@ -86,7 +81,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     ContentFactory factory = new ContentFactory(rf);
     stage = new Stage(50);
     
-    Bernie b = new Bernie();
+    b = new Bernie();
     Content background = factory.createContent("349 Background.png", 3, false);
     stage.add(background);
     stage.add(b);
@@ -94,6 +89,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     stageView.setBounds(0, 0, WIDTH, HEIGHT);
     stageView.addKeyListener(b);
     
+    // Platforms
     Platform platform = new Platform(700, 600, b);
     stage.add(platform);
     Platform platform1 = new Platform(300, 600, b);
@@ -115,9 +111,17 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     Platform platform9 = new Platform(200, 300, b);
     stage.add(platform9);
     
+    //Spikes
+    Spike spike = new Spike (800, 700, b);
+    Spike spike1 = new Spike (825, 700, b);
+    Spike spike2 = new Spike (850, 700, b);
+    stage.add(spike);
+    stage.add(spike1);
+    stage.add(spike2);
+    
     JPanel contentPane = (JPanel)this.getContentPane();
     contentPane.add(stageView);
+    
     stage.start();
   }
-
 }
