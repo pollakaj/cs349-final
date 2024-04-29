@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.Timer;
 
 import Components.Platform;
 import auditory.sampled.BufferedSound;
@@ -49,9 +50,9 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private boolean movingRight = false;
   private boolean isTouchingPlatform = false;
   private int startY = 650;
-  private SampledSprite slicingBern;
   private Content content2;
   private Content content3;
+  private boolean slicing;
 
   public Bernie()
   {
@@ -64,9 +65,13 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
       leftBernie = ImageIO.read(getClass().getResourceAsStream("/resources/bern_left.png"));
       leftBernie = resizeImage(leftBernie, 125, 150);
 
+      slice1 = ImageIO.read(getClass().getResourceAsStream("/resources"
+          + "/Bern(slice1).png"));
       slice1 = ImageIO.read(getClass().getResourceAsStream("/resources/Bern(slice1).png"));
       slice1 = resizeImage(slice1, 125, 150);
       
+      slice2 = ImageIO.read(getClass().getResourceAsStream("/resources"
+          + "/Bern(slice2).png"));
       slice2 = ImageIO.read(getClass().getResourceAsStream("/resources/Bern(slice2).png"));
       slice2 = resizeImage(slice2, 125, 150);
     }
@@ -83,8 +88,6 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     content3 = factory.createContent(slice2);
     leftContent = factory.createContent(leftBernie);
     
-    slicingBern = new SampledSprite();
-
     this.content = content1;
     this.setLocation(100, 650);
     this.setVisible(true);
@@ -93,14 +96,11 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private BufferedImage resizeImage(BufferedImage originalImage,
       int targetWidth, int targetHeight)
   {
-    Image resultingImage = originalImage.getScaledInstance(targetWidth,
-        targetHeight, Image.SCALE_DEFAULT);
-    BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight,
-        BufferedImage.TYPE_INT_ARGB);
-    Graphics2D graphics2D = outputImage.createGraphics();
-    graphics2D.drawImage(resultingImage, 0, 0, null);
-    graphics2D.dispose();
-    return outputImage;
+    BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2d = resizedImage.createGraphics();
+    g2d.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
+    g2d.dispose();
+    return resizedImage;
   }
 
   @Override
@@ -123,6 +123,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     if (code == KeyEvent.VK_LEFT)
     {
       movingLeft = true;
+      leftContent.setLocation(this.x, this.y);
       this.content = leftContent;
     }
     if (code == KeyEvent.VK_RIGHT)
@@ -160,17 +161,52 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     }
     if (code == KeyEvent.VK_X)
     {
-      slicingBern.setLocation(this.x, this.y);
-      slicingBern.addKeyTime(0, new Point2D.Double(this.x, this.y), null, null,
-          content1);
-      slicingBern.addKeyTime(200, new Point2D.Double(this.x, this.y), null,
-          null, content2);
-      slicingBern.addKeyTime(400, new Point2D.Double(this.x, this.y), null,
-          null, content3);
-      slicingBern.setEndState(TweeningSprite.REMOVE);
-      slicingBern.setVisible(true);
-      this.content = slicingBern;
+      setSlicing(true);
+      performSlice();
     }
+  }
+  
+  private void performSlice()
+  {
+    Timer timer1 = new Timer(0, new ActionListener() 
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        content = content2;
+      }
+    });
+    timer1.setRepeats(false);
+    timer1.start();
+  
+    Timer timer2 = new Timer(100, new ActionListener() 
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        content = content3;
+      }
+    });
+    timer2.setRepeats(false);
+    timer2.start();
+  
+    Timer timer3 = new Timer(300, new ActionListener() 
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        content = content1;
+      }
+    });
+    timer3.setRepeats(false);
+    timer3.start();
+  }
+  
+  private void setSlicing(boolean slicing)
+  {
+    this.slicing = slicing;
+  }
+  
+  public boolean isSlicing()
+  {
+    return slicing;
   }
 
   @Override
