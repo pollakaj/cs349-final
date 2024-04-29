@@ -74,7 +74,6 @@ public class BizarreAdventuresApplication extends JApplication implements Action
       e.printStackTrace();
     }
    
- 
     ContentFactory factory = new ContentFactory(rf);
     stage = new Stage(50);
     
