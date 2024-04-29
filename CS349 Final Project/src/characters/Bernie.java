@@ -221,6 +221,14 @@ ActionListener
 
     if (movingLeft) this.x -= SPEED;
     if (movingRight) this.x += SPEED;
+    
+    if (this.x <= 0) {
+    	x = 1919;
+    }
+    
+    if (this.x >= 1920) {
+    	x = 1;
+    }
 
     if (!isTouchingPlatform) 
     {
@@ -339,7 +347,6 @@ ActionListener
   }
 
   public void die() {
-    RectangleWipe recWipe = new RectangleWipe(1, 30);
     setLocation(100, 650);
   }
 }
