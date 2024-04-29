@@ -52,7 +52,6 @@ ActionListener
   private boolean movingRight = false;
   private boolean isTouchingPlatform = false;
   private int startY = 650;
-  private SampledSprite slicingBern;
   private Content content2;
   private Content content3;
   private boolean slicing;
@@ -90,8 +89,6 @@ ActionListener
     content2 = factory.createContent(slice1);
     content3 = factory.createContent(slice2);
     leftContent = factory.createContent(leftBernie);
-    
-    slicingBern = new SampledSprite();
 
     this.content = content1;
     this.setLocation(100, 650);
