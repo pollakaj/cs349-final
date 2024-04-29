@@ -328,6 +328,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
       if (zombie instanceof Zombie && getBounds2D().intersects(zombie.getBounds2D(false)))
       {
         setLocation(100, 650);
+        setJumping(false);
         return;
       }
     }
