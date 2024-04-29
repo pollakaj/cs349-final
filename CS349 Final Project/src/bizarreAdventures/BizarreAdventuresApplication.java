@@ -90,40 +90,9 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     stageView.addKeyListener(b);
     
     // Platforms
-    /**
-     * Platform platform = new Platform(700, 600, b);
+    Platform platform = new Platform(700, 600, b);
     stage.add(platform);
-    Platform platform1 = new Platform(300, 600, b);
-    stage.add(platform1);
-    Platform platform2 = new Platform(1200, 600, b);
-    stage.add(platform2);
-    Platform platform3 = new Platform(1500, 600, b);
-    stage.add(platform3);
-    Platform platform4 = new Platform(900, 400, b);
-    stage.add(platform4);
-    Platform platform5 = new Platform(500, 400, b);
-    stage.add(platform5);
-    Platform platform6 = new Platform(1500, 400, b);
-    stage.add(platform6);
-    Platform platform7 = new Platform(1700, 400, b);
-    stage.add(platform7);
-    Platform platform8 = new Platform(100, 250, b);
-    stage.add(platform8);
-    Platform platform9 = new Platform(200, 300, b);
-    stage.add(platform9);
-    
     b.addAntagonist(platform);
-    b.addAntagonist(platform1);
-    b.addAntagonist(platform2);
-    b.addAntagonist(platform3);
-    b.addAntagonist(platform4);
-    b.addAntagonist(platform5);
-    b.addAntagonist(platform6);
-    b.addAntagonist(platform7);
-    b.addAntagonist(platform8);
-    b.addAntagonist(platform9);
-     */
-    
     
     //Spikes
     /**
@@ -135,9 +104,12 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     stage.add(spike2);
      */
     
-    Zombie zombie = new Zombie(b);
+    /**
+     * Zombie zombie = new Zombie(b);
     stage.add(zombie);
     b.addAntagonist(zombie);
+     */
+    
     
     
     JPanel contentPane = (JPanel)this.getContentPane();
