@@ -86,4 +86,14 @@ public class Zombie extends RuleBasedSprite {
 		}
 	}
 	
+	public void checkSliced()
+	{
+	  if (b.isSlicing() && this.getBounds2D().intersects(b.getBounds2D())) die();
+	}
+	
+	public void die()
+	{
+	  this.x = -10000;
+	}
+	
 }
