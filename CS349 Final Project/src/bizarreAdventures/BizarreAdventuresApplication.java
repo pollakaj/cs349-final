@@ -29,6 +29,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
   public static final int HEIGHT = 1080;
   private Bernie b;
   private Stage stage;
+  private Clip clip;
 
   public BizarreAdventuresApplication(final String[] args)
   {
@@ -52,7 +53,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     try
     {
       BufferedSound music = buffFactory.createBufferedSound("background_music.wav");
-      Clip clip = javax.sound.sampled.AudioSystem.getClip();
+      clip = javax.sound.sampled.AudioSystem.getClip();
       music.render(clip);
       
     }
@@ -119,24 +120,21 @@ public class BizarreAdventuresApplication extends JApplication implements Action
      */
     
     
-    //Spikes
-    /**
-     * Spike spike = new Spike (800, 700, b);
     Spike spike1 = new Spike (825, 700, b);
-    Spike spike2 = new Spike (850, 700, b);
-    stage.add(spike);
     stage.add(spike1);
-    stage.add(spike2);
-     */
     
     
     
     Zombie zombie = new Zombie(b, stage);
     stage.add(zombie);
-    b.addAntagonist(zombie);
+    b.addAntagonist(zombie); 
+    
+    if (b.isDead) {
+      clip.stop();
+    }
 
     JPanel contentPane = (JPanel)this.getContentPane();
-    contentPane.add(stageView);
+    contentPane.add(stageView); 
     
     stage.start();
   }
