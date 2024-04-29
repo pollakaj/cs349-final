@@ -83,10 +83,8 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     VisualizationView stageView = stage.getView(); 
     stageView.setBounds(0, 0, WIDTH, HEIGHT);
     stageView.addKeyListener(b);
-    
-    // Platforms
     /**
-     * Platform platform = new Platform(700, 600, b);
+    Platform platform = new Platform(700, 600, b);
     stage.add(platform);
     Platform platform1 = new Platform(300, 600, b);
     stage.add(platform1);
@@ -117,14 +115,11 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     b.addAntagonist(platform7);
     b.addAntagonist(platform8);
     b.addAntagonist(platform9);
-     */
-    
+    */
     
     Spike spike1 = new Spike (825, 700, b);
     stage.add(spike1);
-    
-    
-    
+ 
     Zombie zombie = new Zombie(b, stage);
     stage.add(zombie);
     b.addAntagonist(zombie); 

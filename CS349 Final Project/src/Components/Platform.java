@@ -73,19 +73,17 @@ public class Platform extends RuleBasedSprite
       double bernTop = bernieBounds.getY();
       double platformTop = platformBounds.getY();
       b.setTouchingPlatform(true);
-      
-      System.out.println(bernieBounds.getMaxY());
-      System.out.println(platformTop);
-      System.out.println(bernTop);
-      
+
       if (bernieBounds.getMaxY() >= platformTop && bernTop <= platformTop) 
       {
         double newY = platformTop - bernieBounds.getHeight();
         b.setY(newY);
-        b.setJumping(false);
-        
+        b.setJumping(false);     
       }
-    } 
+    } else
+    {
+      b.setTouchingPlatform(false);
+    }
   }
   
   private BufferedImage resizeImage(BufferedImage originalImage,

@@ -25,7 +25,7 @@ import visual.statik.sampled.*;
 
 public class Bernie extends RuleBasedSprite implements KeyListener, ActionListener
 {
-  private static final int SPEED = 9;
+  private static final int SPEED = 11;
   private static final double GRAVITY = 4.0;
   private static final double INIT_JUMP_SPD = -50.0;
   
@@ -63,10 +63,10 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     this.stage = stage;
     try
     {
-      bernie = ImageIO.read(getClass().getResourceAsStream("/resources/BernHair.png"));
+      bernie = ImageIO.read(getClass().getResourceAsStream("/resources/Bern.png"));
       bernie = resizeImage(bernie, 125, 150);
       
-      leftBernie = ImageIO.read(getClass().getResourceAsStream("/resources/Bern(HairFlip).png"));
+      leftBernie = ImageIO.read(getClass().getResourceAsStream("/resources/bern_left.png"));
       leftBernie = resizeImage(leftBernie, 125, 150);
 
       slice1 = ImageIO.read(getClass().getResourceAsStream("/resources"
