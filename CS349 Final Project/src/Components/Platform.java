@@ -17,9 +17,12 @@ import visual.statik.sampled.ContentFactory;
 
 
 /**
- * Platform class to encapsulate any methods the Platforms might need
- * @author Cole Glaccum
+ * Platform class to encapsulate any methods the Platforms might need.
  *
+ * @author Cole Glaccum and Adam Pollak
+ * @version 1.0
+ *
+ * This code complies with the JMU Honor Code.
  */
 public class Platform extends RuleBasedSprite
 {
@@ -32,7 +35,15 @@ public class Platform extends RuleBasedSprite
   private int x;
   private int y;
 
-  public Platform(int x, int y, Bernie b)
+  /**
+   * Platform constructor to create platforms at a specific position in the
+   *  application.
+   *
+   * @param x int x coordinate for the platform
+   * @param y int y coordinate for the platform
+   * @param b Bernie character from application that will interact
+   */
+  public Platform(final int x, final int y, final Bernie b)
   {
     super(new Content());
     
@@ -42,10 +53,10 @@ public class Platform extends RuleBasedSprite
     
     try
     {
-      platform = ImageIO.read(getClass().getResourceAsStream("/resources/larger_platform.png"));
+      platform = ImageIO.read(getClass().getResourceAsStream("/resources"
+          + "/larger_platform.png"));
       platform = resizeImage(platform, 150, 15);
-    }
-     catch (IOException e)
+    } catch (IOException e)
     {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -62,7 +73,7 @@ public class Platform extends RuleBasedSprite
   }
 
   @Override
-  public void handleTick(int arg0)
+  public void handleTick(final int arg0)
   {
     Rectangle2D bernieBounds = b.getBounds2D();
     Rectangle2D platformBounds = new Rectangle2D.Double(getX(), getY(), 
@@ -86,8 +97,16 @@ public class Platform extends RuleBasedSprite
     }
   }
   
-  private BufferedImage resizeImage(BufferedImage originalImage,
-      int targetWidth, int targetHeight)
+  /**
+   * Resize image method to adjust the size of platform objects.
+   *
+   * @param originalImage BufferedImage of image to be resized
+   * @param targetWidth int value of desired width
+   * @param targetHeight int value of desired height
+   * @return BufferedImage resized image
+   */
+  private BufferedImage resizeImage(final BufferedImage originalImage,
+      final int targetWidth, final int targetHeight)
   {
     Image resultingImage = originalImage.getScaledInstance(targetWidth,
         targetHeight, Image.SCALE_DEFAULT);
@@ -99,11 +118,23 @@ public class Platform extends RuleBasedSprite
     return outputImage;
   }
   
-  public int getX() {
+  /**
+   * Getter for platform's x coordinate value.
+   * 
+   * @return int value of platform's x coordinate
+   */
+  public int getX() 
+  {
     return x;
   }
   
-  public int getY() {
+  /**
+   * Getter for platform's y coordinate value.
+   * 
+   * @return int value of platform's y coordinate
+   */
+  public int getY() 
+  {
     return y;
   }
   

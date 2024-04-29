@@ -11,10 +11,17 @@ import characters.Bernie;
 import io.ResourceFinder;
 import resources.Marker;
 import visual.dynamic.described.RuleBasedSprite;
-import visual.statik.TransformableContent;
 import visual.statik.sampled.Content;
 import visual.statik.sampled.ContentFactory;
 
+/**
+ * Spike class to encapsulate any methods the Spike objects might need.
+ *
+ * @author Cole Glaccum and Adam Pollak
+ * @version 1.0
+ *
+ * This code complies with the JMU Honor Code.
+ */
 public class Spike extends RuleBasedSprite
 {
   
@@ -26,7 +33,15 @@ public class Spike extends RuleBasedSprite
   private int x;
   private int y;
 
-  public Spike(int x, int y, Bernie b)
+  /**
+   * Spike constructor to create spikes at a specific position in the
+   *  application.
+   *
+   * @param x int x coordinate for the spike
+   * @param y int y coordinate for the spike
+   * @param b Bernie character from application that will interact
+   */
+  public Spike(final int x, final int y, final Bernie b)
   {
     super(new Content());
     
@@ -36,10 +51,10 @@ public class Spike extends RuleBasedSprite
     
     try
     {
-      platform = ImageIO.read(getClass().getResourceAsStream("/resources/spike.png"));
+      platform = ImageIO.read(getClass().getResourceAsStream("/resources"
+          + "/spike.png"));
       platform = resizeImage(platform, 100, 100);
-    }
-     catch (IOException e)
+    } catch (IOException e)
     {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -56,16 +71,21 @@ public class Spike extends RuleBasedSprite
   }
 
   @Override
-  public void handleTick(int arg0)
+  public void handleTick(final int arg0)
   {
-    if (content1.getBounds2D().intersects(b.getBounds2D())) {
-      // Player is touching the spike
-      b.isDead();
-    }
+    if (content1.getBounds2D().intersects(b.getBounds2D())) b.isDead();
   }
   
-  private BufferedImage resizeImage(BufferedImage originalImage,
-      int targetWidth, int targetHeight)
+  /**
+   * Resize image method to adjust the size of spike objects.
+   *
+   * @param originalImage BufferedImage of image to be resized
+   * @param targetWidth int value of desired width
+   * @param targetHeight int value of desired height
+   * @return BufferedImage resized image
+   */
+  private BufferedImage resizeImage(final BufferedImage originalImage,
+      final int targetWidth, final int targetHeight)
   {
     Image resultingImage = originalImage.getScaledInstance(targetWidth,
         targetHeight, Image.SCALE_DEFAULT);
@@ -77,11 +97,23 @@ public class Spike extends RuleBasedSprite
     return outputImage;
   }
   
-  public int getX() {
+  /**
+   * Getter for spike's x coordinate value.
+   * 
+   * @return int value of spike's x coordinate
+   */
+  public int getX() 
+  {
     return x;
   }
   
-  public int getY() {
+  /**
+   * Getter for spike's y coordinate value.
+   * 
+   * @return int value of spike's y coordinate
+   */
+  public int getY()
+  {
     return y;
   }
 

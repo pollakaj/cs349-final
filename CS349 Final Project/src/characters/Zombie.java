@@ -16,8 +16,18 @@ import visual.dynamic.described.Stage;
 import visual.statik.sampled.Content;
 import visual.statik.sampled.ContentFactory;
 
-public class Zombie extends RuleBasedSprite {
+/**
+ * Zombie character class for design and functionality of enemies.
+ *
+ * @author Adam Pollak and Cole Glaccum
+ * @version 1.0
+ * 
+ * This code complies with the JMU Honor Code.
+ */
+public class Zombie extends RuleBasedSprite 
+{
 	
+  private static final String RESOURCE_PATH = "/resources";
 	private static final int SPEED = 5;
 	private int maxX = 1920;
 	private Content content1;
@@ -30,23 +40,31 @@ public class Zombie extends RuleBasedSprite {
 	private Stage stage;
 	private int spawnCounter = 0;
 	
-	public Zombie(Bernie b, Stage stage) {
+	/**
+	 * Zombie constructor being passed the stage and Bernie in application.
+	 *
+	 * @param b Bernie character for current game
+	 * @param stage Stage for current application
+	 */
+	public Zombie(final Bernie b, final Stage stage) 
+	{
 		super(new Content());
 		this.b = b;
 		this.stage = stage;
 		try
-	    {
-			zombie = ImageIO.read(getClass().getResourceAsStream("/resources/zombie_right.png"));
+	  {
+			zombie = ImageIO.read(getClass().getResourceAsStream(RESOURCE_PATH
+			    + "/zombie_right.png"));
 			zombie = resizeImage(zombie, 125, 150);
 			
-			leftZombie = ImageIO.read(getClass().getResourceAsStream("/resources/zombie_left.png"));
+			leftZombie = ImageIO.read(getClass().getResourceAsStream(RESOURCE_PATH
+			    + "/zombie_left.png"));
 			leftZombie = resizeImage(leftZombie, 125, 150);
-	    }
+	  }
 		
 		catch (IOException e)
 		{
-		      // TODO Auto-generated catch block
-		      e.printStackTrace();
+		  e.printStackTrace();
 		}
 		
 		finder = ResourceFinder.createInstance(new resources.Marker());
@@ -58,63 +76,82 @@ public class Zombie extends RuleBasedSprite {
 	  this.setVisible(true);
 	}
 
-	private BufferedImage resizeImage(BufferedImage originalImage,
-		      int targetWidth, int targetHeight)
-	  {
-	    Image resultingImage = originalImage.getScaledInstance(targetWidth,
-	        targetHeight, Image.SCALE_DEFAULT);
-	    BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight,
-	        BufferedImage.TYPE_INT_ARGB);
-	    Graphics2D graphics2D = outputImage.createGraphics();
-	    graphics2D.drawImage(resultingImage, 0, 0, null);
-	    graphics2D.dispose();
-	    return outputImage;
-	  }
+	/**
+   * Resize image method to adjust the size of different orientations.
+   *
+   * @param originalImage BufferedImage of image to be resized
+   * @param targetWidth int value of desired width
+   * @param targetHeight int value of desired height
+   * @return BufferedImage resized image
+   */
+	private BufferedImage resizeImage(final BufferedImage originalImage,
+		      final int targetWidth, final int targetHeight)
+	{
+	  Image resultingImage = originalImage.getScaledInstance(targetWidth,
+	      targetHeight, Image.SCALE_DEFAULT);
+	  BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight,
+	      BufferedImage.TYPE_INT_ARGB);
+	  Graphics2D graphics2D = outputImage.createGraphics();
+	  graphics2D.drawImage(resultingImage, 0, 0, null);
+	  graphics2D.dispose();
+	  return outputImage;
+	}
 
 	@Override
-	public void handleTick(int arg0) {
-		if (content1.getBounds2D().intersects(b.getBounds2D())) {
-			b.isDead();
-		}
+	public void handleTick(final int arg0) 
+	{
+		if (content1.getBounds2D().intersects(b.getBounds2D())) b.isDead();
 		updateLocation();
 	}
 	
-	public void updateLocation() {
+	/**
+	 * UpdateLocation method to set movement and active tracking.
+	 */
+	public void updateLocation() 
+	{
 		double diff = b.getX() - this.x;
-		if (diff < 0) {
+		if (diff < 0) 
+		{
 			this.x -= SPEED;
 			this.content = content2;
-		} else {
-			this.x += SPEED;
-		}
+		} else this.x += SPEED;
 		
-		if (this.x >= maxX) {
-			this.x = 0;
-		}
+		if (this.x >= maxX) this.x = 0;
 	}
 	
+	/**
+	 * Method to check if the zombie has been sliced, if so, zombie is killed.
+	 */
 	public void checkSliced()
 	{
 	  if (b.isSlicing() && this.getBounds2D().intersects(b.getBounds2D())) die();
 	}
 	
-	public void die()
+	/**
+	 * Method to kill the zombie and spawn a new one, returns true if zombie died.
+	 *
+	 * @return boolean to let Bernie know the zombie is dead
+	 */
+	public boolean die()
 	{
 	  stage.remove(this);
-	  if (spawnCounter >= 5) return;
-	  spawnZombie();
+	  if (spawnCounter < 5) spawnZombie();
 	  spawnCounter++;
+	  return true;
 	}
 	
+	/**
+	 * SpawnZombie method to randomly spawn in zombies throughout the game.
+	 */
 	private void spawnZombie()
 	{
-	  int randomX = (int) (Math.random() * (maxX - 100 + 1) + 100);
 	  Zombie newZombie = new Zombie(b, stage);
-	  newZombie.setLocation(randomX, 650);
+	  newZombie.setLocation(1930, 650);
 	  stage.add(newZombie);
 	  
-	  Timer timer = new Timer(100, new ActionListener() {
-	    public void actionPerformed(ActionEvent e)
+	  Timer timer = new Timer(100, new ActionListener() 
+	  {
+	    public void actionPerformed(final ActionEvent e)
 	    {
 	      b.addAntagonist(newZombie);
 	    }

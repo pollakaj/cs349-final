@@ -15,6 +15,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Timer;
 
 import Components.GameOver;
+import Components.Victory;
 import auditory.sampled.BufferedSound;
 import auditory.sampled.BufferedSoundFactory;
 import io.ResourceFinder;
@@ -23,11 +24,21 @@ import visual.dynamic.described.Sprite;
 import visual.dynamic.described.Stage;
 import visual.statik.sampled.*;
 
+/**
+ * Bernstein main character class for design and functionality.
+ *
+ * @author Adam Pollak and Cole Glaccum
+ * @version 1.0
+ * 
+ * This code complies with the JMU Honor Code.
+ */
+
 public class Bernie extends RuleBasedSprite implements KeyListener, ActionListener
 {
   private static final int SPEED = 11;
   private static final double GRAVITY = 4.0;
   private static final double INIT_JUMP_SPD = -50.0;
+  private static final String RESOURCE_PATH = "/resources";
   
   private Content content1;
   private Content leftContent;
@@ -37,18 +48,20 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private BufferedImage leftBernie = null;
   private BufferedImage slice1 = null;
   private BufferedImage slice2 = null;
-  private BufferedImage slice1_left = null;
-  private BufferedImage slice2_left = null;
+  private BufferedImage slice1Left = null;
+  private BufferedImage slice2Left = null;
   private double prevX;
   private double prevY;
   
+  private boolean isDead = false;
+  private boolean didWin = false;
   private double jumpSpeed = INIT_JUMP_SPD;
   private boolean isJumping = false;
-  public boolean isDead = false;
   private boolean movingLeft = false;
   private boolean facingLeft = false;
   private boolean movingRight = false;
   private boolean isTouchingPlatform = false;
+  private int killCounter = 0;
   private int startY = 650;
   private Content content2;
   private Content content3;
@@ -57,30 +70,40 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private boolean slicing;
   private Stage stage;
 
-  public Bernie(Stage stage)
+  /**
+   * Bernie constructor for multiple image construction and initializations.
+   *
+   * @param stage Stage object linked with the character and application
+   */
+
+  public Bernie(final Stage stage)
   {
     super(new Content());
     this.stage = stage;
     try
     {
-      bernie = ImageIO.read(getClass().getResourceAsStream("/resources/Bern.png"));
+      bernie = ImageIO.read(getClass().getResourceAsStream(RESOURCE_PATH
+          + "/Bern.png"));
       bernie = resizeImage(bernie, 125, 150);
       
-      leftBernie = ImageIO.read(getClass().getResourceAsStream("/resources/bern_left.png"));
+      leftBernie = ImageIO.read(getClass().getResourceAsStream(RESOURCE_PATH
+          + "/bern_left.png"));
       leftBernie = resizeImage(leftBernie, 125, 150);
 
-      slice1 = ImageIO.read(getClass().getResourceAsStream("/resources"
+      slice1 = ImageIO.read(getClass().getResourceAsStream(RESOURCE_PATH
           + "/Bern(slice1).png"));
-      slice1_left = ImageIO.read(getClass().getResourceAsStream("/resources/bern(slice1_left).png"));
+      slice1Left = ImageIO.read(getClass().getResourceAsStream(RESOURCE_PATH
+          + "/bern(slice1_left).png"));
       slice1 = resizeImage(slice1, 125, 150);
-      slice1_left = resizeImage(slice1_left, 125, 150);
+      slice1Left = resizeImage(slice1Left, 125, 150);
 
-      slice2 = ImageIO.read(getClass().getResourceAsStream("/resources"
+      slice2 = ImageIO.read(getClass().getResourceAsStream(RESOURCE_PATH
           + "/Bern(slice2).png"));
-      slice2_left = ImageIO.read(getClass().getResourceAsStream("/resources/bern(slice2_left).png"));
+      slice2Left = ImageIO.read(getClass().getResourceAsStream(RESOURCE_PATH
+          + "/bern(slice2_left).png"));
       
       slice2 = resizeImage(slice2, 125, 150);
-      slice2_left = resizeImage(slice2_left, 125, 150);
+      slice2Left = resizeImage(slice2Left, 125, 150);
 
     }
     catch (IOException e)
@@ -95,8 +118,8 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     content2 = factory.createContent(slice1);
     content3 = factory.createContent(slice2);
     
-    content4 = factory.createContent(slice1_left);
-    content5 = factory.createContent(slice2_left);
+    content4 = factory.createContent(slice1Left);
+    content5 = factory.createContent(slice2Left);
     leftContent = factory.createContent(leftBernie);
     
     this.content = content1;
@@ -104,10 +127,19 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     this.setVisible(true);
   }
 
-  private BufferedImage resizeImage(BufferedImage originalImage,
-      int targetWidth, int targetHeight)
+  /**
+   * Resize image method to adjust the size of different orientations.
+   *
+   * @param originalImage BufferedImage of image to be resized
+   * @param targetWidth int value of desired width
+   * @param targetHeight int value of desired height
+   * @return BufferedImage resized image
+   */
+  private BufferedImage resizeImage(final BufferedImage originalImage,
+      final int targetWidth, final int targetHeight)
   {
-    BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+    BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight,
+        BufferedImage.TYPE_INT_ARGB);
     Graphics2D g2d = resizedImage.createGraphics();
     g2d.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
     g2d.dispose();
@@ -115,20 +147,20 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   }
 
   @Override
-  public void actionPerformed(ActionEvent e)
+  public void actionPerformed(final ActionEvent e)
   {
   }
 
 
   @Override
-  public void keyTyped(KeyEvent e)
+  public void keyTyped(final KeyEvent e)
   {
     // TODO Auto-generated method stub
     
   }
 
   @Override
-  public void keyPressed(KeyEvent e)
+  public void keyPressed(final KeyEvent e)
   {
     int code = e.getKeyCode();
     if (code == KeyEvent.VK_LEFT)
@@ -183,11 +215,14 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     }
   }
   
+  /**
+   * Perform slice method for animating the slicing motion of Bernie.
+   */
   private void performSlice()
   {
     Timer timer1 = new Timer(0, new ActionListener() 
     {
-      public void actionPerformed(ActionEvent e)
+      public void actionPerformed(final ActionEvent e)
       {
         if (facingLeft) content = content4;
         else content = content2;
@@ -198,7 +233,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   
     Timer timer2 = new Timer(100, new ActionListener() 
     {
-      public void actionPerformed(ActionEvent e)
+      public void actionPerformed(final ActionEvent e)
       {
         if (facingLeft) content = content5;
         else content = content3;
@@ -209,7 +244,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   
     Timer timer3 = new Timer(300, new ActionListener() 
     {
-      public void actionPerformed(ActionEvent e)
+      public void actionPerformed(final ActionEvent e)
       {
         if (facingLeft) content = leftContent;
         else content = content1;
@@ -218,6 +253,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
           if (zombie instanceof Zombie)
           {
             ((Zombie) zombie).checkSliced();
+            if (((Zombie) zombie).die()) killCounter++;
           }
         }
         setSlicing(false);
@@ -225,20 +261,31 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     });
     timer3.setRepeats(false);
     timer3.start();
+    if (killCounter == 1) victory();
   }
   
-  private void setSlicing(boolean slicing)
+  /**
+   * Setter for the slicing boolean.
+   *
+   * @param slicing boolean value if the character is in the slicing motion
+   */
+  private void setSlicing(final boolean slicing)
   {
     this.slicing = slicing;
   }
   
+  /**
+   * Getter for the slicing boolean to check if character is in slicing motion.
+   *
+   * @return boolean value if the character is slicing
+   */
   public boolean isSlicing()
   {
     return slicing;
   }
 
   @Override
-  public void keyReleased(KeyEvent e)
+  public void keyReleased(final KeyEvent e)
   {
     int code = e.getKeyCode();
     if (code == KeyEvent.VK_LEFT)
@@ -250,7 +297,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   }
 
   @Override
-  public void handleTick(int arg0)
+  public void handleTick(final int arg0)
   {
     prevX = getX();
     prevY = getY();
@@ -258,13 +305,9 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     if (movingLeft) this.x -= SPEED;
     if (movingRight) this.x += SPEED;
     
-    if (this.x <= 0) {
-    	x = 1919;
-    }
+    if (this.x <= 0) x = 1919;
     
-    if (this.x >= 1920) {
-    	x = 1;
-    }
+    if (this.x >= 1920) x = 1;
 
     if (!isTouchingPlatform) 
     {
@@ -294,48 +337,121 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     }
   }
 
+  /**
+   * Getter for the character's x value.
+   *
+   * @return double x value of Bernie
+   */
   public double getX()
   {
     return this.x;
   }
   
+  /**
+   * Getter for the character's y value.
+   *
+   * @return double y value of Bernie
+   */
   public double getY()
   {
     return this.y;
   }
   
-  public void setY(double yLocal)
+  /**
+   * Setter for the character's y value.
+   *
+   * @param yLocal Y value desired for Bernie to be updated to
+   */
+  public void setY(final double yLocal)
   {
     this.y = yLocal;
   }
   
-  public void setX(double xLocal)
+  /**
+   * Setter for the character's x value.
+   *
+   * @param xLocal X value desired for Bernie to be updated to
+   */
+  public void setX(final double xLocal)
   {
     this.x = xLocal;
   }
   
+  /**
+   * Getter for Bernie's previous x value.
+   *
+   * @return Double Bernie's previous x coordinate value
+   */
   public double getPrevX()
   {
     return prevX;
   }
   
+  /**
+   * Getter for Bernie's previous y value.
+   *
+   * @return Double Bernie's previous y coordinate value
+   */
   public double getPrevY()
   {
     return prevY;
   }
   
-  public boolean isJumping() {
+  /**
+   * Getter for boolean value to check if Bernie is in the jumping motion.
+   *
+   * @return Boolean value if Bernie is jumping
+   */
+  public boolean isJumping() 
+  {
     return this.isJumping;
   }
 
-  public void setJumping(boolean jumping) {
+  /**
+   * Setter for the jumping boolean to declare if Bernie is jumping.
+   *
+   * @param jumping boolean value to set jumping boolean to
+   */
+  public void setJumping(final boolean jumping) 
+  {
     isJumping = jumping;
   }
   
-  public void setTouchingPlatform(boolean touching) {
+  /**
+   * Setter for the isTouchingPlatform boolean to check if Bernie is on a
+   *  platform.
+   *
+   * @param touching boolean value to set isTouchingPlatform boolean to
+   */
+  public void setTouchingPlatform(final boolean touching) 
+  {
     isTouchingPlatform = touching;
   }
   
+  /**
+   * Getter for the isDead boolean.
+   *
+   * @return boolean to check if Bernie is dead
+   */
+  public boolean checkDead()
+  {
+    return this.isDead;
+  }
+  
+  /**
+   * Getter for if the player won.
+   *
+   * @return boolean to check if player won
+   */
+  public boolean didWin() 
+  {
+    return this.didWin;
+  }
+  
+  /**
+   * If Bernie "dies" play the death sound and call the GameOver application,
+   *  stops the current stage.
+   */
   public void isDead() 
   {
     BufferedSoundFactory buffFactory = new BufferedSoundFactory(finder);
@@ -366,5 +482,16 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     isDead = true;
     stage.stop();
     new GameOver().run();
+  }
+  
+  /**
+   * Victory method called if criteria for beating the game is met, stops the
+   *  stage and runs the Victory application.
+   */
+  public void victory()
+  {
+    didWin = true;
+    stage.stop();
+    new Victory().run();
   }
 }

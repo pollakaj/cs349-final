@@ -8,8 +8,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
 
-import Components.GameOver;
-import Components.Platform;
 import Components.Spike;
 import app.JApplication;
 import auditory.sampled.BufferedSound;
@@ -23,6 +21,15 @@ import visual.dynamic.described.Stage;
 import visual.statik.sampled.Content;
 import visual.statik.sampled.ContentFactory;
 
+/**
+ * BizareeAdventures Application class for gameplay.
+ *
+ * @author Adam Pollak and Cole Glaccum
+ * @version 1.0
+ * 
+ * This code complies with the JMU Honor Code.
+ */
+
 public class BizarreAdventuresApplication extends JApplication implements ActionListener
 {
   public static final int WIDTH = 1920;
@@ -31,13 +38,19 @@ public class BizarreAdventuresApplication extends JApplication implements Action
   private Stage stage;
   private Clip clip;
 
+  /**
+   * Application Constructor calling the JApplication parent constructor.
+   *
+   * @param args command line arguments
+   */
+
   public BizarreAdventuresApplication(final String[] args)
   {
     super(args, WIDTH, HEIGHT);
   }
 
   @Override
-  public void actionPerformed(ActionEvent e)
+  public void actionPerformed(final ActionEvent e)
   {
   }
 
@@ -124,7 +137,8 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     stage.add(zombie);
     b.addAntagonist(zombie); 
     
-    if (b.isDead) {
+    if (b.checkDead())
+    {
       clip.stop();
     }
 

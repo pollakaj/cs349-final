@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 
 import app.JApplication;
 import bizarreAdventures.BizarreAdventuresApplication;
-import gui.StartWindow;
 import io.ResourceFinder;
 import resources.Marker;
 import visual.VisualizationView;
@@ -17,25 +16,38 @@ import visual.dynamic.described.Stage;
 import visual.statik.sampled.Content;
 import visual.statik.sampled.ContentFactory;
 
-public class GameOver extends JApplication implements KeyListener, ActionListener
+/**
+ * GameOver application that appears when the player's character "dies".
+ *
+ * @author Adam Pollak and Cole Glaccum
+ * @version 1.0
+ * 
+ * This code complies with the JMU Honor Code.
+ */
+public class GameOver extends JApplication implements KeyListener,
+    ActionListener
 {
+  @SuppressWarnings("unused")
   private static final long serialVersionUID = 1L;
   private Stage stage;
   
+  /**
+   * GameOver constructor that passes window dimensions to parent.
+   */
   public GameOver()
   {
     super(1920, 1080);
   }
 
   @Override
-  public void keyTyped(KeyEvent e)
+  public void keyTyped(final KeyEvent e)
   {
     // TODO Auto-generated method stub
     
   }
 
   @Override
-  public void keyPressed(KeyEvent e)
+  public void keyPressed(final KeyEvent e)
   {
     int code = e.getKeyCode();
     if (code == KeyEvent.VK_SPACE)
@@ -51,7 +63,7 @@ public class GameOver extends JApplication implements KeyListener, ActionListene
   }
 
   @Override
-  public void keyReleased(KeyEvent e)
+  public void keyReleased(final KeyEvent e)
   {
     // TODO Auto-generated method stub
     
@@ -77,7 +89,7 @@ public class GameOver extends JApplication implements KeyListener, ActionListene
   }
 
   @Override
-  public void actionPerformed(ActionEvent e)
+  public void actionPerformed(final ActionEvent e)
   {
     // TODO Auto-generated method stub
     
