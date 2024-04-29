@@ -63,10 +63,10 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     this.stage = stage;
     try
     {
-      bernie = ImageIO.read(getClass().getResourceAsStream("/resources/Bern.png"));
+      bernie = ImageIO.read(getClass().getResourceAsStream("/resources/BernHair.png"));
       bernie = resizeImage(bernie, 125, 150);
       
-      leftBernie = ImageIO.read(getClass().getResourceAsStream("/resources/bern_left.png"));
+      leftBernie = ImageIO.read(getClass().getResourceAsStream("/resources/Bern(HairFlip).png"));
       leftBernie = resizeImage(leftBernie, 125, 150);
 
       slice1 = ImageIO.read(getClass().getResourceAsStream("/resources"
@@ -145,7 +145,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
       movingRight = true;
       this.content = content1;
     }  
-    if (code == KeyEvent.VK_SPACE && !isJumping && this.y == startY)
+    if (code == KeyEvent.VK_SPACE && !isJumping)
     {
       BufferedSoundFactory buffFactory = new BufferedSoundFactory(finder);
       
