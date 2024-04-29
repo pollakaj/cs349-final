@@ -9,6 +9,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
 import Components.Platform;
 import Components.Spike;
+import Components.TitleScreen;
 import app.JApplication;
 import auditory.sampled.BufferedSound;
 import auditory.sampled.BufferedSoundFactory;
@@ -27,6 +28,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
   public static final int HEIGHT = 1080;
   private Bernie b;
   private Stage stage;
+  private TitleScreen titleScreen;
 
   public BizarreAdventuresApplication(final String[] args)
   {
@@ -41,8 +43,16 @@ public class BizarreAdventuresApplication extends JApplication implements Action
   @Override
   public void actionPerformed(ActionEvent e)
   {
-    
-    
+    if (e.getSource() == titleScreen.getStartButton())
+    {
+      startGame();
+    }
+  }
+  
+  private void startGame()
+  {
+    titleScreen.dispose();
+    stage.start();
   }
 
   @Override

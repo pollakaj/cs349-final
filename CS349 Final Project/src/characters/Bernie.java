@@ -71,11 +71,11 @@ ActionListener
 
       slice1 = ImageIO.read(getClass().getResourceAsStream("/resources"
           + "/Bern(slice1).png"));
-      slice1 = resizeImage(slice1, 150, 200);
+      slice1 = resizeImage(slice1, 125, 150);
       
       slice2 = ImageIO.read(getClass().getResourceAsStream("/resources"
           + "/Bern(slice2).png"));
-      slice2 = resizeImage(slice2, 175, 225);
+      slice2 = resizeImage(slice2, 125, 150);
     }
     catch (IOException e)
     {
@@ -98,14 +98,11 @@ ActionListener
   private BufferedImage resizeImage(BufferedImage originalImage,
       int targetWidth, int targetHeight)
   {
-    Image resultingImage = originalImage.getScaledInstance(targetWidth,
-        targetHeight, Image.SCALE_DEFAULT);
-    BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight,
-        BufferedImage.TYPE_INT_ARGB);
-    Graphics2D graphics2D = outputImage.createGraphics();
-    graphics2D.drawImage(resultingImage, 0, 0, null);
-    graphics2D.dispose();
-    return outputImage;
+    BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2d = resizedImage.createGraphics();
+    g2d.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
+    g2d.dispose();
+    return resizedImage;
   }
 
   @Override
@@ -128,6 +125,7 @@ ActionListener
     if (code == KeyEvent.VK_LEFT)
     {
       movingLeft = true;
+      leftContent.setLocation(this.x, this.y);
       this.content = leftContent;
     }
     if (code == KeyEvent.VK_RIGHT)
@@ -172,18 +170,18 @@ ActionListener
   
   private void performSlice()
   {
-    Timer timer = new Timer(300, new ActionListener() {
+    Timer timer1 = new Timer(0, new ActionListener() 
+    {
       public void actionPerformed(ActionEvent e)
       {
-        setSlicing(false);
-        content = content1;
+        content = content2;
       }
     });
-    timer.setRepeats(false);
-    timer.start();
-    content = content2;
-    
-    Timer timer2 = new Timer(100, new ActionListener() {
+    timer1.setRepeats(false);
+    timer1.start();
+  
+    Timer timer2 = new Timer(100, new ActionListener() 
+    {
       public void actionPerformed(ActionEvent e)
       {
         content = content3;
@@ -191,6 +189,16 @@ ActionListener
     });
     timer2.setRepeats(false);
     timer2.start();
+  
+    Timer timer3 = new Timer(300, new ActionListener() 
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        content = content1;
+      }
+    });
+    timer3.setRepeats(false);
+    timer3.start();
   }
   
   private void setSlicing(boolean slicing)
