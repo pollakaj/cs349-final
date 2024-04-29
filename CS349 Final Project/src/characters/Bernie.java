@@ -14,11 +14,13 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.Timer;
 
 import Components.Platform;
 import auditory.sampled.BufferedSound;
 import auditory.sampled.BufferedSoundFactory;
 import io.ResourceFinder;
+import visual.dynamic.described.AbstractSprite;
 import visual.dynamic.described.RuleBasedSprite;
 import visual.dynamic.described.SampledSprite;
 import visual.dynamic.described.Sprite;
@@ -26,7 +28,8 @@ import visual.dynamic.described.TweeningSprite;
 import visual.dynamic.sampled.RectangleWipe;
 import visual.statik.sampled.*;
 
-public class Bernie extends RuleBasedSprite implements KeyListener, ActionListener
+public class Bernie extends RuleBasedSprite implements KeyListener,
+ActionListener
 {
   private static final int SPEED = 9;
   private static final double GRAVITY = 4.0;
@@ -49,26 +52,30 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private boolean movingRight = false;
   private boolean isTouchingPlatform = false;
   private int startY = 650;
-  private SampledSprite slicingBern;
   private Content content2;
   private Content content3;
+  private boolean slicing;
 
   public Bernie()
   {
     super(new Content());
     try
     {
-      bernie = ImageIO.read(getClass().getResourceAsStream("/resources/Bern.png"));
+      bernie = ImageIO.read(getClass().getResourceAsStream("/resources"
+          + "/Bern.png"));
       bernie = resizeImage(bernie, 125, 150);
       
-      leftBernie = ImageIO.read(getClass().getResourceAsStream("/resources/bern_left.png"));
+      leftBernie = ImageIO.read(getClass().getResourceAsStream("/resources"
+          + "/bern_left.png"));
       leftBernie = resizeImage(leftBernie, 125, 150);
 
-      slice1 = ImageIO.read(getClass().getResourceAsStream("/resources/Bern(slice1).png"));
-      slice1 = resizeImage(slice1, 125, 150);
+      slice1 = ImageIO.read(getClass().getResourceAsStream("/resources"
+          + "/Bern(slice1).png"));
+      slice1 = resizeImage(slice1, 150, 200);
       
-      slice2 = ImageIO.read(getClass().getResourceAsStream("/resources/Bern(slice2).png"));
-      slice2 = resizeImage(slice2, 125, 150);
+      slice2 = ImageIO.read(getClass().getResourceAsStream("/resources"
+          + "/Bern(slice2).png"));
+      slice2 = resizeImage(slice2, 175, 225);
     }
     catch (IOException e)
     {
@@ -82,8 +89,6 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     content2 = factory.createContent(slice1);
     content3 = factory.createContent(slice2);
     leftContent = factory.createContent(leftBernie);
-    
-    slicingBern = new SampledSprite();
 
     this.content = content1;
     this.setLocation(100, 650);
@@ -160,19 +165,43 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     }
     if (code == KeyEvent.VK_X)
     {
-      slicingBern.setLocation(this.x, this.y);
-      slicingBern.addKeyTime(0, new Point2D.Double(this.x, this.y), null, null,
-          content1);
-      slicingBern.addKeyTime(200, new Point2D.Double(this.x, this.y), null,
-          null, content2);
-      slicingBern.addKeyTime(400, new Point2D.Double(this.x, this.y), null,
-          null, content3);
-      slicingBern.setEndState(TweeningSprite.REMOVE);
-      slicingBern.setVisible(true);
-      this.content = slicingBern;
+      setSlicing(true);
+      performSlice();
     }
   }
-
+  
+  private void performSlice()
+  {
+    Timer timer = new Timer(300, new ActionListener() {
+      public void actionPerformed(ActionEvent e)
+      {
+        setSlicing(false);
+        content = content1;
+      }
+    });
+    timer.setRepeats(false);
+    timer.start();
+    content = content2;
+    
+    Timer timer2 = new Timer(100, new ActionListener() {
+      public void actionPerformed(ActionEvent e)
+      {
+        content = content3;
+      }
+    });
+    timer2.setRepeats(false);
+    timer2.start();
+  }
+  
+  private void setSlicing(boolean slicing)
+  {
+    this.slicing = slicing;
+  }
+  
+  public boolean isSlicing()
+  {
+    return slicing;
+  }
   @Override
   public void keyReleased(KeyEvent e)
   {
@@ -189,6 +218,14 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
 
     if (movingLeft) this.x -= SPEED;
     if (movingRight) this.x += SPEED;
+    
+    if (this.x <= 0) {
+    	x = 1919;
+    }
+    
+    if (this.x >= 1920) {
+    	x = 1;
+    }
 
     if (!isTouchingPlatform) 
     {
@@ -228,17 +265,29 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
           if (p.intersects(this))
           {
             onPlatform = true;
+            
+            double bernieTop = getY();
+            double bernieBottom = getY() + this.getBounds2D().getHeight();
+            double bernieLeft = getX();
+            double bernieRight = getX() + this.getBounds2D().getWidth();
 
-            if (getY() + this.getBounds2D().getHeight() <= p.getY())
+            double platformTop = p.getY();
+            double platformBottom = p.getY()
+                + p.getContent().getBounds2D(false).getHeight();
+            double platformLeft = p.getX();
+            double platformRight = p.getX()
+                + p.getContent().getBounds2D(false).getWidth();
+            
+            if (bernieBottom <= platformTop && bernieTop >= platformBottom
+                && bernieRight > platformLeft && bernieLeft < platformRight)
             {
-              double newY = p.getY() - this.getBounds2D().getHeight();
+              double newY = platformTop - this.getBounds2D().getHeight();
               setY(newY);
               setJumping(false);
               isTouchingPlatform = true;
             } else
             {
-              double newY = p.getY()
-                  + p.getContent().getBounds2D(false).getHeight();
+              double newY = platformBottom;
               setY(newY);
               jumpSpeed = 0;
             }
@@ -295,7 +344,6 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   }
 
   public void die() {
-    RectangleWipe recWipe = new RectangleWipe(1, 30);
     setLocation(100, 650);
   }
 }

@@ -13,6 +13,7 @@ import app.JApplication;
 import auditory.sampled.BufferedSound;
 import auditory.sampled.BufferedSoundFactory;
 import characters.Bernie;
+import characters.Zombie;
 import io.ResourceFinder;
 import resources.Marker;
 import visual.VisualizationView;
@@ -89,7 +90,8 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     stageView.addKeyListener(b);
     
     // Platforms
-    Platform platform = new Platform(700, 600, b);
+    /**
+     * Platform platform = new Platform(700, 600, b);
     stage.add(platform);
     Platform platform1 = new Platform(300, 600, b);
     stage.add(platform1);
@@ -105,7 +107,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     stage.add(platform6);
     Platform platform7 = new Platform(1700, 400, b);
     stage.add(platform7);
-    Platform platform8 = new Platform(100, 200, b);
+    Platform platform8 = new Platform(100, 250, b);
     stage.add(platform8);
     Platform platform9 = new Platform(200, 300, b);
     stage.add(platform9);
@@ -120,14 +122,23 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     b.addAntagonist(platform7);
     b.addAntagonist(platform8);
     b.addAntagonist(platform9);
+     */
+    
     
     //Spikes
-    Spike spike = new Spike (800, 700, b);
+    /**
+     * Spike spike = new Spike (800, 700, b);
     Spike spike1 = new Spike (825, 700, b);
     Spike spike2 = new Spike (850, 700, b);
     stage.add(spike);
     stage.add(spike1);
     stage.add(spike2);
+     */
+    
+    Zombie zombie = new Zombie(b);
+    stage.add(zombie);
+    b.addAntagonist(zombie);
+    
     
     JPanel contentPane = (JPanel)this.getContentPane();
     contentPane.add(stageView);
