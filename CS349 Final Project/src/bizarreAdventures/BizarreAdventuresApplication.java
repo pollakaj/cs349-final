@@ -34,8 +34,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
   }
   
   public static void main(String[] args) {
-    JApplication mainWindow = new BizarreAdventuresApplication(args);
-    invokeInEventDispatchThread(mainWindow);
+    
  }
 
   @Override
