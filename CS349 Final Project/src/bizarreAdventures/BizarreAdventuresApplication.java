@@ -134,7 +134,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     Zombie zombie = new Zombie(b, stage);
     stage.add(zombie);
     b.addAntagonist(zombie);
-    
+
     JPanel contentPane = (JPanel)this.getContentPane();
     contentPane.add(stageView);
     
