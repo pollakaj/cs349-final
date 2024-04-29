@@ -16,13 +16,16 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Timer;
 
+import Components.GameOver;
 import Components.Platform;
 import auditory.sampled.BufferedSound;
 import auditory.sampled.BufferedSoundFactory;
+import bizarreAdventures.BizarreAdventuresApplication;
 import io.ResourceFinder;
 import visual.dynamic.described.RuleBasedSprite;
 import visual.dynamic.described.SampledSprite;
 import visual.dynamic.described.Sprite;
+import visual.dynamic.described.Stage;
 import visual.dynamic.described.TweeningSprite;
 import visual.dynamic.sampled.RectangleWipe;
 import visual.statik.sampled.*;
@@ -46,6 +49,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   
   private double jumpSpeed = INIT_JUMP_SPD;
   private boolean isJumping = false;
+  public boolean isDead = false;
   private boolean movingLeft = false;
   private boolean movingRight = false;
   private boolean isTouchingPlatform = false;
@@ -53,10 +57,12 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private Content content2;
   private Content content3;
   private boolean slicing;
+  private Stage stage;
 
-  public Bernie()
+  public Bernie(Stage stage)
   {
     super(new Content());
+    this.stage = stage;
     try
     {
       bernie = ImageIO.read(getClass().getResourceAsStream("/resources/Bern.png"));
@@ -268,12 +274,6 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
         }
       }
     }
-    
-    for (Sprite zombie : antagonists)
-    {
-      if (zombie instanceof Zombie &&
-          getBounds2D().intersects(zombie.getBounds2D(false))) die();
-    }
   }
 
   public double getX()
@@ -318,8 +318,35 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     isTouchingPlatform = touching;
   }
   
-  public void die() 
+  public void isDead() 
   {
-    setLocation(100, 650);
+    BufferedSoundFactory buffFactory = new BufferedSoundFactory(finder);
+    
+    try
+    {
+      BufferedSound music = buffFactory.createBufferedSound("womp womp.wav");
+      Clip clip = javax.sound.sampled.AudioSystem.getClip();
+      music.render(clip);
+      
+    }
+    catch (IOException exc)
+    {
+      // TODO Auto-generated catch block
+      exc.printStackTrace();
+    }
+    catch (UnsupportedAudioFileException exc)
+    {
+      // TODO Auto-generated catch block
+      exc.printStackTrace();
+    }
+    catch (LineUnavailableException exc)
+    {
+      // TODO Auto-generated catch block
+      exc.printStackTrace();
+    }
+    
+    isDead = true;
+    stage.stop();
+    new GameOver().run();
   }
 }

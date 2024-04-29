@@ -74,7 +74,7 @@ public class Zombie extends RuleBasedSprite {
 	@Override
 	public void handleTick(int arg0) {
 		if (content1.getBounds2D().intersects(b.getBounds2D())) {
-			b.die();
+			b.isDead();
 		}
 		updateLocation();
 	}

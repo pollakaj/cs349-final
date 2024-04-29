@@ -7,6 +7,8 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
+
+import Components.GameOver;
 import Components.Platform;
 import Components.Spike;
 import app.JApplication;
@@ -32,10 +34,6 @@ public class BizarreAdventuresApplication extends JApplication implements Action
   {
     super(args, WIDTH, HEIGHT);
   }
-  
-  public static void main(String[] args) {
-    
- }
 
   @Override
   public void actionPerformed(ActionEvent e)
@@ -77,7 +75,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     ContentFactory factory = new ContentFactory(rf);
     stage = new Stage(50);
     
-    b = new Bernie();
+    b = new Bernie(stage);
     Content background = factory.createContent("349 Background.png", 3, false);
     stage.add(background);
     stage.add(b);
@@ -131,10 +129,11 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     stage.add(spike2);
      */
     
+    
+    
     Zombie zombie = new Zombie(b, stage);
     stage.add(zombie);
     b.addAntagonist(zombie);
-    
     
     JPanel contentPane = (JPanel)this.getContentPane();
     contentPane.add(stageView);

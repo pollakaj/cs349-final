@@ -60,7 +60,7 @@ public class Spike extends RuleBasedSprite
   {
     if (content1.getBounds2D().intersects(b.getBounds2D())) {
       // Player is touching the spike
-      b.die();
+      b.isDead();
     }
   }
   
