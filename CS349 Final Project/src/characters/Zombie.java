@@ -14,7 +14,7 @@ import visual.statik.sampled.ContentFactory;
 
 public class Zombie extends RuleBasedSprite {
 	
-	private static final int SPEED = 9;
+	private static final int SPEED = 5;
 	private int maxX = 1920;
 	private Content content1;
 	private Content content2;

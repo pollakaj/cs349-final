@@ -42,8 +42,8 @@ public class Platform extends RuleBasedSprite
     
     try
     {
-      platform = ImageIO.read(getClass().getResourceAsStream("/resources/large_platform.png"));
-      platform = resizeImage(platform, 100, 100);
+      platform = ImageIO.read(getClass().getResourceAsStream("/resources/larger_platform.png"));
+      platform = resizeImage(platform, 150, 15);
     }
      catch (IOException e)
     {
