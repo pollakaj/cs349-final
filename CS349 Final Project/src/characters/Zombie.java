@@ -50,12 +50,12 @@ public class Zombie extends RuleBasedSprite {
 		}
 		
 		finder = ResourceFinder.createInstance(new resources.Marker());
-	    factory = new ContentFactory(finder);
-	    content1 = factory.createContent(zombie);
-	    content2 = factory.createContent(leftZombie);
-	    this.content = content1;
-	    this.setLocation(1400, 650);
-	    this.setVisible(true);
+	  factory = new ContentFactory(finder);
+	  content1 = factory.createContent(zombie);
+	  content2 = factory.createContent(leftZombie);
+	  this.content = content1;
+	  this.setLocation(1400, 650);
+	  this.setVisible(true);
 	}
 
 	private BufferedImage resizeImage(BufferedImage originalImage,
@@ -101,7 +101,7 @@ public class Zombie extends RuleBasedSprite {
 	public void die()
 	{
 	  stage.remove(this);
-	  if (spawnCounter == 5) return;
+	  if (spawnCounter >= 5) return;
 	  spawnZombie();
 	  spawnCounter++;
 	}
