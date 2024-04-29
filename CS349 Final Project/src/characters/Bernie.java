@@ -120,14 +120,11 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   public void keyPressed(KeyEvent e)
   {
     int code = e.getKeyCode();
-    if (code == KeyEvent.VK_LEFT)
+    if (code == KeyEvent.VK_LEFT && !movingLeft)
     {
-      if (!movingLeft)
-      {
-        movingLeft = true;
-        leftContent.setLocation(this.x, this.y);
-        this.content = leftContent;
-      }
+      movingLeft = true;
+      leftContent.setLocation(this.x, this.y);
+      this.content = leftContent;
     }
     if (code == KeyEvent.VK_RIGHT)
     {
@@ -162,13 +159,10 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
       }
       isJumping = true;
     }
-    if (code == KeyEvent.VK_X)
+    if (code == KeyEvent.VK_X && !isSlicing())
     {
-      if (!isSlicing())
-      {
-        setSlicing(true);
-        performSlice();
-      }
+      setSlicing(true);
+      performSlice();
     }
   }
   
@@ -273,9 +267,12 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
           }
         }
       }
-    } else
+    }
+    
+    for (Sprite zombie : antagonists)
     {
-    	
+      if (zombie instanceof Zombie &&
+          getBounds2D().intersects(zombie.getBounds2D(false))) die();
     }
   }
 
@@ -320,17 +317,9 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   public void setTouchingPlatform(boolean touching) {
     isTouchingPlatform = touching;
   }
-
+  
   public void die() 
   {
-    for (Sprite zombie : antagonists)
-    {
-      if (zombie instanceof Zombie && getBounds2D().intersects(zombie.getBounds2D(false)))
-      {
-        setLocation(100, 650);
-        setJumping(false);
-        return;
-      }
-    }
+    setLocation(100, 650);
   }
 }
