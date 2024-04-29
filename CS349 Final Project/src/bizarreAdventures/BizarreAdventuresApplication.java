@@ -105,7 +105,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     stage.add(platform6);
     Platform platform7 = new Platform(1700, 400, b);
     stage.add(platform7);
-    Platform platform8 = new Platform(100, 200, b);
+    Platform platform8 = new Platform(100, 250, b);
     stage.add(platform8);
     Platform platform9 = new Platform(200, 300, b);
     stage.add(platform9);
