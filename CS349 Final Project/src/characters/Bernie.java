@@ -20,7 +20,6 @@ import Components.Platform;
 import auditory.sampled.BufferedSound;
 import auditory.sampled.BufferedSoundFactory;
 import io.ResourceFinder;
-import visual.dynamic.described.AbstractSprite;
 import visual.dynamic.described.RuleBasedSprite;
 import visual.dynamic.described.SampledSprite;
 import visual.dynamic.described.Sprite;
@@ -28,8 +27,7 @@ import visual.dynamic.described.TweeningSprite;
 import visual.dynamic.sampled.RectangleWipe;
 import visual.statik.sampled.*;
 
-public class Bernie extends RuleBasedSprite implements KeyListener,
-ActionListener
+public class Bernie extends RuleBasedSprite implements KeyListener, ActionListener
 {
   private static final int SPEED = 9;
   private static final double GRAVITY = 4.0;
@@ -61,20 +59,20 @@ ActionListener
     super(new Content());
     try
     {
-      bernie = ImageIO.read(getClass().getResourceAsStream("/resources"
-          + "/Bern.png"));
+      bernie = ImageIO.read(getClass().getResourceAsStream("/resources/Bern.png"));
       bernie = resizeImage(bernie, 125, 150);
       
-      leftBernie = ImageIO.read(getClass().getResourceAsStream("/resources"
-          + "/bern_left.png"));
+      leftBernie = ImageIO.read(getClass().getResourceAsStream("/resources/bern_left.png"));
       leftBernie = resizeImage(leftBernie, 125, 150);
 
       slice1 = ImageIO.read(getClass().getResourceAsStream("/resources"
           + "/Bern(slice1).png"));
+      slice1 = ImageIO.read(getClass().getResourceAsStream("/resources/Bern(slice1).png"));
       slice1 = resizeImage(slice1, 125, 150);
       
       slice2 = ImageIO.read(getClass().getResourceAsStream("/resources"
           + "/Bern(slice2).png"));
+      slice2 = ImageIO.read(getClass().getResourceAsStream("/resources/Bern(slice2).png"));
       slice2 = resizeImage(slice2, 125, 150);
     }
     catch (IOException e)
@@ -89,7 +87,7 @@ ActionListener
     content2 = factory.createContent(slice1);
     content3 = factory.createContent(slice2);
     leftContent = factory.createContent(leftBernie);
-
+    
     this.content = content1;
     this.setLocation(100, 650);
     this.setVisible(true);
@@ -210,6 +208,7 @@ ActionListener
   {
     return slicing;
   }
+
   @Override
   public void keyReleased(KeyEvent e)
   {
@@ -252,60 +251,17 @@ ActionListener
       {
         if (this.y < startY) 
         {
-          jumpSpeed += GRAVITY;
-          this.y += jumpSpeed;
 
           if (this.y >= startY)
           {
-            this.y = startY;
+            this.y = startY; 
             jumpSpeed = INIT_JUMP_SPD;
           }
         }
       }
     } else
     {
-      boolean onPlatform = false;
-      for (Sprite platform : antagonists)
-      {
-        if (platform instanceof Platform)
-        {
-          Platform p = (Platform) platform;
-          if (p.intersects(this))
-          {
-            onPlatform = true;
-            
-            double bernieTop = getY();
-            double bernieBottom = getY() + this.getBounds2D().getHeight();
-            double bernieLeft = getX();
-            double bernieRight = getX() + this.getBounds2D().getWidth();
-
-            double platformTop = p.getY();
-            double platformBottom = p.getY()
-                + p.getContent().getBounds2D(false).getHeight();
-            double platformLeft = p.getX();
-            double platformRight = p.getX()
-                + p.getContent().getBounds2D(false).getWidth();
-            
-            if (bernieBottom <= platformTop && bernieTop >= platformBottom
-                && bernieRight > platformLeft && bernieLeft < platformRight)
-            {
-              double newY = platformTop - this.getBounds2D().getHeight();
-              setY(newY);
-              setJumping(false);
-              isTouchingPlatform = true;
-            } else
-            {
-              double newY = platformBottom;
-              setY(newY);
-              jumpSpeed = 0;
-            }
-          }
-        }
-      }
-      if (!onPlatform)
-      {
-        isTouchingPlatform = false;
-      }
+    	
     }
   }
 
@@ -352,6 +308,7 @@ ActionListener
   }
 
   public void die() {
+
     setLocation(100, 650);
   }
 }
