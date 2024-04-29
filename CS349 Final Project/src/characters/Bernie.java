@@ -53,6 +53,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private boolean isJumping = false;
   public boolean isDead = false;
   private boolean movingLeft = false;
+  private boolean facingLeft = false;
   private boolean movingRight = false;
   private boolean isTouchingPlatform = false;
   private int startY = 650;
@@ -79,16 +80,14 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
           + "/Bern(slice1).png"));
       slice1_left = ImageIO.read(getClass().getResourceAsStream("/resources/bern(slice1_left).png"));
       slice1 = resizeImage(slice1, 125, 150);
-      slice1_left = resizeImage(slice1, 125, 150);
+      slice1_left = resizeImage(slice1_left, 125, 150);
 
-      
-      
       slice2 = ImageIO.read(getClass().getResourceAsStream("/resources"
           + "/Bern(slice2).png"));
       slice2_left = ImageIO.read(getClass().getResourceAsStream("/resources/bern(slice2_left).png"));
       
       slice2 = resizeImage(slice2, 125, 150);
-      slice2_left = resizeImage(slice1, 125, 150);
+      slice2_left = resizeImage(slice2_left, 125, 150);
 
     }
     catch (IOException e)
@@ -145,6 +144,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
       {
         movingLeft = true;
         this.content = leftContent;
+        facingLeft = true;
       }
     }
     if (code == KeyEvent.VK_RIGHT)
@@ -196,7 +196,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     {
       public void actionPerformed(ActionEvent e)
       {
-        if (movingLeft) content = content4;
+        if (facingLeft) content = content4;
         else content = content2;
       }
     });
@@ -207,7 +207,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     {
       public void actionPerformed(ActionEvent e)
       {
-        if (movingLeft) content = content5;
+        if (facingLeft) content = content5;
         else content = content3;
       }
     });
@@ -218,7 +218,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     {
       public void actionPerformed(ActionEvent e)
       {
-        if (movingLeft) content = leftContent;
+        if (facingLeft) content = leftContent;
         else content = content1;
         for (Sprite zombie : antagonists)
         {
@@ -248,7 +248,11 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   public void keyReleased(KeyEvent e)
   {
     int code = e.getKeyCode();
-    if (code == KeyEvent.VK_LEFT) movingLeft = false;
+    if (code == KeyEvent.VK_LEFT)
+    {
+      movingLeft = false;
+      facingLeft = false;
+    }
     if (code == KeyEvent.VK_RIGHT) movingRight = false;
   }
 
