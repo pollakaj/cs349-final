@@ -2,10 +2,13 @@ package characters;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.Timer;
 
 import io.ResourceFinder;
 import visual.dynamic.described.RuleBasedSprite;
@@ -25,6 +28,7 @@ public class Zombie extends RuleBasedSprite {
 	private BufferedImage leftZombie = null;
 	private Bernie b;
 	private Stage stage;
+	private int spawnCounter = 0;
 	
 	public Zombie(Bernie b, Stage stage) {
 		super(new Content());
@@ -97,16 +101,26 @@ public class Zombie extends RuleBasedSprite {
 	public void die()
 	{
 	  stage.remove(this);
+	  if (spawnCounter == 5) return;
 	  spawnZombie();
+	  spawnCounter++;
 	}
 	
 	private void spawnZombie()
 	{
-	  Zombie newZombie = new Zombie(b, stage);
-	  stage.add(newZombie);
-	  b.addAntagonist(newZombie);
 	  int randomX = (int) (Math.random() * (maxX - 100 + 1) + 100);
+	  Zombie newZombie = new Zombie(b, stage);
 	  newZombie.setLocation(randomX, 650);
+	  stage.add(newZombie);
+	  
+	  Timer timer = new Timer(100, new ActionListener() {
+	    public void actionPerformed(ActionEvent e)
+	    {
+	      b.addAntagonist(newZombie);
+	    }
+	  });
+	  timer.setRepeats(false);
+	  timer.start();
 	}
 	
 }
