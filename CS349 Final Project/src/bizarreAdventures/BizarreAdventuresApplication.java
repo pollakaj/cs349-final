@@ -133,7 +133,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     stage.add(spike2);
      */
     
-    Zombie zombie = new Zombie(b);
+    Zombie zombie = new Zombie(b, stage);
     stage.add(zombie);
     b.addAntagonist(zombie);
     

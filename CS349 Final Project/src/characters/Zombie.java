@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import io.ResourceFinder;
 import visual.dynamic.described.RuleBasedSprite;
+import visual.dynamic.described.Stage;
 import visual.statik.sampled.Content;
 import visual.statik.sampled.ContentFactory;
 
@@ -23,10 +24,12 @@ public class Zombie extends RuleBasedSprite {
 	private BufferedImage zombie = null;
 	private BufferedImage leftZombie = null;
 	private Bernie b;
+	private Stage stage;
 	
-	public Zombie(Bernie b) {
+	public Zombie(Bernie b, Stage stage) {
 		super(new Content());
 		this.b = b;
+		this.stage = stage;
 		try
 	    {
 			zombie = ImageIO.read(getClass().getResourceAsStream("/resources/zombie_right.png"));
@@ -93,7 +96,17 @@ public class Zombie extends RuleBasedSprite {
 	
 	public void die()
 	{
-	  this.x = -10000;
+	  stage.remove(this);
+	  spawnZombie();
+	}
+	
+	private void spawnZombie()
+	{
+	  Zombie newZombie = new Zombie(b, stage);
+	  stage.add(newZombie);
+	  b.addAntagonist(newZombie);
+	  int randomX = (int) (Math.random() * (maxX - 100 + 1) + 100);
+	  newZombie.setLocation(randomX, 650);
 	}
 	
 }
