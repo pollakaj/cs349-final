@@ -71,16 +71,14 @@ public class Platform extends RuleBasedSprite
     if (bernieBounds.intersects(platformBounds)) 
     {
       double bernTop = bernieBounds.getY();
-      double bernBottom = bernTop + bernieBounds.getHeight();
       double platformTop = platformBounds.getY();
-      double platformBottom = platformTop + platformBounds.getHeight();
 
-      if (bernBottom >= platformTop && bernTop <= platformBottom + 10) 
+      if (bernieBounds.getMaxY() >= platformTop && bernTop <= platformTop) 
       {
-        b.setTouchingPlatform(true);
         double newY = platformTop - bernieBounds.getHeight();
         b.setY(newY);
         b.setJumping(false);
+        b.setTouchingPlatform(true);
       }
     } else 
     {

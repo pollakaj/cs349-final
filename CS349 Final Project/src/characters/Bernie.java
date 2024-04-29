@@ -228,19 +228,38 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
           if (p.intersects(this))
           {
             onPlatform = true;
-            if (getY() + this.getBounds2D().getHeight() <= p.getY())
+            
+            double bernieTop = getY();
+            double bernieBottom = getY() + this.getBounds2D().getHeight();
+            double bernieLeft = getX();
+            double bernieRight = getX() + this.getBounds2D().getWidth();
+
+            double platformTop = p.getY();
+            double platformBottom = p.getY()
+                + p.getContent().getBounds2D(false).getHeight();
+            double platformLeft = p.getX();
+            double platformRight = p.getX()
+                + p.getContent().getBounds2D(false).getWidth();
+            
+            if (bernieBottom <= platformTop && bernieTop >= platformBottom
+                && bernieRight > platformLeft && bernieLeft < platformRight)
             {
-              double newY = p.getY() - this.getBounds2D().getHeight();
+              double newY = platformTop - this.getBounds2D().getHeight();
               setY(newY);
               setJumping(false);
+              isTouchingPlatform = true;
             } else
             {
-              double newY = p.getY() + p.getContent().getBounds2D(false).getHeight();
+              double newY = platformBottom;
               setY(newY);
               jumpSpeed = 0;
             }
           }
         }
+      }
+      if (!onPlatform)
+      {
+        isTouchingPlatform = false;
       }
     }
   }
