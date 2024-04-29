@@ -2,7 +2,6 @@ package Components;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -65,23 +64,28 @@ public class Platform extends RuleBasedSprite
   @Override
   public void handleTick(int arg0)
   {
-    int margin = 10;
-    Rectangle2D bernieBounds = new Rectangle2D.Double(b.getX(), b.getY(),
-        b.getBounds2D().getWidth(), b.getBounds2D().getHeight());
-    Rectangle2D platformMargBounds = new Rectangle2D.Double(getX(), getY(),
+    Rectangle2D bernieBounds = b.getBounds2D();
+    Rectangle2D platformBounds = new Rectangle2D.Double(getX(), getY(), 
         content1.getBounds2D().getWidth(), content1.getBounds2D().getHeight());
-    
-    if (bernieBounds.intersects(platformMargBounds))
+
+    if (bernieBounds.intersects(platformBounds)) 
     {
-      b.setTouchingPlatform(true);
-      double newY = platformMargBounds.getY() - bernieBounds.getHeight();
-      b.setY(newY);
-      b.setJumping(false);   
-    } else
+      double bernTop = bernieBounds.getY();
+      double bernBottom = bernTop + bernieBounds.getHeight();
+      double platformTop = platformBounds.getY();
+      double platformBottom = platformTop + platformBounds.getHeight();
+
+      if (bernBottom >= platformTop && bernTop <= platformBottom + 10) 
+      {
+        b.setTouchingPlatform(true);
+        double newY = platformTop - bernieBounds.getHeight();
+        b.setY(newY);
+        b.setJumping(false);
+      }
+    } else 
     {
       b.setTouchingPlatform(false);
     }
-    
   }
   
   private BufferedImage resizeImage(BufferedImage originalImage,

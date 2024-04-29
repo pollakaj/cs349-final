@@ -17,7 +17,6 @@ import io.ResourceFinder;
 import resources.Marker;
 import visual.VisualizationView;
 import visual.dynamic.described.Stage;
-import visual.statik.TransformableContent;
 import visual.statik.sampled.Content;
 import visual.statik.sampled.ContentFactory;
 
@@ -110,6 +109,17 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     stage.add(platform8);
     Platform platform9 = new Platform(200, 300, b);
     stage.add(platform9);
+    
+    b.addAntagonist(platform);
+    b.addAntagonist(platform1);
+    b.addAntagonist(platform2);
+    b.addAntagonist(platform3);
+    b.addAntagonist(platform4);
+    b.addAntagonist(platform5);
+    b.addAntagonist(platform6);
+    b.addAntagonist(platform7);
+    b.addAntagonist(platform8);
+    b.addAntagonist(platform9);
     
     //Spikes
     Spike spike = new Spike (800, 700, b);

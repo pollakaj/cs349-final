@@ -15,11 +15,13 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import Components.Platform;
 import auditory.sampled.BufferedSound;
 import auditory.sampled.BufferedSoundFactory;
 import io.ResourceFinder;
 import visual.dynamic.described.RuleBasedSprite;
 import visual.dynamic.described.SampledSprite;
+import visual.dynamic.described.Sprite;
 import visual.dynamic.described.TweeningSprite;
 import visual.dynamic.sampled.RectangleWipe;
 import visual.statik.sampled.*;
@@ -28,7 +30,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
 {
   private static final int SPEED = 9;
   private static final double GRAVITY = 4.0;
-  private static final double INIT_JUMP_SPD = -40.0;
+  private static final double INIT_JUMP_SPD = -45.0;
   
   private Content content1;
   private Content leftContent;
@@ -38,6 +40,8 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private BufferedImage leftBernie = null;
   private BufferedImage slice1 = null;
   private BufferedImage slice2 = null;
+  private double prevX;
+  private double prevY;
   
   private double jumpSpeed = INIT_JUMP_SPD;
   private boolean isJumping = false;
@@ -180,32 +184,34 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   @Override
   public void handleTick(int arg0)
   {
+    prevX = getX();
+    prevY = getY();
+
     if (movingLeft) this.x -= SPEED;
     if (movingRight) this.x += SPEED;
-    
-    if (!isTouchingPlatform)
+
+    if (!isTouchingPlatform) 
     {
-      if (isJumping)
+      if (isJumping) 
       {
         jumpSpeed += GRAVITY;
         this.y += jumpSpeed;
-      
-        if (jumpSpeed >= 0 && this.y >= startY)
+
+        if (this.y >= startY) 
         {
           isJumping = false;
           this.y = startY;
           jumpSpeed = INIT_JUMP_SPD;
         }
-      } else
+      } else 
       {
-        if (this.y < startY)
+        if (this.y < startY) 
         {
           jumpSpeed += GRAVITY;
           this.y += jumpSpeed;
-          
-          if (jumpSpeed >= 0 && this.y >= startY)
+
+          if (this.y >= startY)
           {
-            isJumping = false;
             this.y = startY;
             jumpSpeed = INIT_JUMP_SPD;
           }
@@ -213,16 +219,30 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
       }
     } else
     {
-      if (this.y < startY)
+      boolean onPlatform = false;
+      for (Sprite platform : antagonists)
       {
-        jumpSpeed += GRAVITY;
-        this.y += jumpSpeed;
-      } else
-      {
-        this.y = startY;
-        jumpSpeed = INIT_JUMP_SPD;
+        if (platform instanceof Platform)
+        {
+          Platform p = (Platform) platform;
+          if (p.intersects(this))
+          {
+            onPlatform = true;
+            if (getY() + this.getBounds2D().getHeight() <= p.getY())
+            {
+              double newY = p.getY() - this.getBounds2D().getHeight();
+              setY(newY);
+              setJumping(false);
+            } else
+            {
+              double newY = p.getY() + p.getContent().getBounds2D(false).getHeight();
+              setY(newY);
+              jumpSpeed = 0;
+            }
+          }
+        }
       }
-    }  
+    }
   }
 
   public double getX()
@@ -239,6 +259,25 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   {
     this.y = yLocal;
   }
+  
+  public void setX(double xLocal)
+  {
+    this.x = xLocal;
+  }
+  
+  public double getPrevX()
+  {
+    return prevX;
+  }
+  
+  public double getPrevY()
+  {
+    return prevY;
+  }
+  
+  public boolean isJumping() {
+    return this.isJumping;
+  }
 
   public void setJumping(boolean jumping) {
     isJumping = jumping;
@@ -247,7 +286,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   public void setTouchingPlatform(boolean touching) {
     isTouchingPlatform = touching;
   }
-  
+
   public void die() {
     RectangleWipe recWipe = new RectangleWipe(1, 30);
     setLocation(100, 650);
