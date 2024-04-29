@@ -41,6 +41,8 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private BufferedImage leftBernie = null;
   private BufferedImage slice1 = null;
   private BufferedImage slice2 = null;
+  private BufferedImage slice1_left = null;
+  private BufferedImage slice2_left = null;
   private double prevX;
   private double prevY;
   
@@ -52,6 +54,8 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private int startY = 650;
   private Content content2;
   private Content content3;
+  private Content content4;
+  private Content content5;
   private boolean slicing;
 
   public Bernie()
@@ -67,13 +71,19 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
 
       slice1 = ImageIO.read(getClass().getResourceAsStream("/resources"
           + "/Bern(slice1).png"));
-      slice1 = ImageIO.read(getClass().getResourceAsStream("/resources/Bern(slice1).png"));
+      slice1_left = ImageIO.read(getClass().getResourceAsStream("/resources/bern(slice1_left).png"));
       slice1 = resizeImage(slice1, 125, 150);
+      slice1_left = resizeImage(slice1, 125, 150);
+
+      
       
       slice2 = ImageIO.read(getClass().getResourceAsStream("/resources"
           + "/Bern(slice2).png"));
-      slice2 = ImageIO.read(getClass().getResourceAsStream("/resources/Bern(slice2).png"));
+      slice2_left = ImageIO.read(getClass().getResourceAsStream("/resources/bern(slice2_left).png"));
+      
       slice2 = resizeImage(slice2, 125, 150);
+      slice2_left = resizeImage(slice1, 125, 150);
+
     }
     catch (IOException e)
     {
@@ -86,6 +96,9 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     content1 = factory.createContent(bernie);
     content2 = factory.createContent(slice1);
     content3 = factory.createContent(slice2);
+    
+    content4 = factory.createContent(slice1_left);
+    content5 = factory.createContent(slice2_left);
     leftContent = factory.createContent(leftBernie);
     
     this.content = content1;
@@ -120,11 +133,13 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   public void keyPressed(KeyEvent e)
   {
     int code = e.getKeyCode();
-    if (code == KeyEvent.VK_LEFT && !movingLeft)
+    if (code == KeyEvent.VK_LEFT)
     {
-      movingLeft = true;
-      leftContent.setLocation(this.x, this.y);
-      this.content = leftContent;
+      if (!movingLeft)
+      {
+        movingLeft = true;
+        this.content = leftContent;
+      }
     }
     if (code == KeyEvent.VK_RIGHT)
     {
@@ -159,10 +174,13 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
       }
       isJumping = true;
     }
-    if (code == KeyEvent.VK_X && !isSlicing())
+    if (code == KeyEvent.VK_X)
     {
-      setSlicing(true);
-      performSlice();
+      if (!isSlicing())
+      {
+        setSlicing(true);
+        performSlice();
+      }
     }
   }
   
@@ -172,7 +190,8 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     {
       public void actionPerformed(ActionEvent e)
       {
-        content = content2;
+        if (movingLeft) content = content4;
+        else content = content2;
       }
     });
     timer1.setRepeats(false);
@@ -182,7 +201,8 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     {
       public void actionPerformed(ActionEvent e)
       {
-        content = content3;
+        if (movingLeft) content = content5;
+        else content = content3;
       }
     });
     timer2.setRepeats(false);
@@ -192,7 +212,8 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     {
       public void actionPerformed(ActionEvent e)
       {
-        content = content1;
+        if (movingLeft) content = leftContent;
+        else content = content1;
         for (Sprite zombie : antagonists)
         {
           if (zombie instanceof Zombie)
