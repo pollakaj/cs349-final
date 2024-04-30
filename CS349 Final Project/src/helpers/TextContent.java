@@ -23,7 +23,7 @@ public class TextContent implements SimpleContent
    * @param text The text
    * @param baselineLeft The registration point (in VisualizationView coordinates)
    */
-  public TextContent(String text, Point baselineLeft)
+  public TextContent(final String text, final Point baselineLeft)
   {
     setLocation(baselineLeft);
     setText(text);
@@ -36,7 +36,7 @@ public class TextContent implements SimpleContent
    * 
    * @param g  The rendering engine to use
    */
-  public void render(Graphics g)
+  public void render(final Graphics g)
   {
     Graphics2D g2 = (Graphics2D)g;
     Color oldColor = g2.getColor();
@@ -55,7 +55,7 @@ public class TextContent implements SimpleContent
    * 
    * @param color The Color
    */
-  public void setColor(Color color)
+  public void setColor(final Color color)
   {
     this.color = color;
   }
@@ -65,17 +65,17 @@ public class TextContent implements SimpleContent
    * 
    * @param font The Font
    */
-  public void setFont(Font font)
+  public void setFont(final Font font)
   {
     this.font = font;
   }
   
   /**
-   * Set the registration point (i.e., location)
+   * Set the registration point (i.e., location).
    * 
    * @param baselineLeft The registration point (in VisualizationView coordinates)
    */
-  public void setLocation(Point baselineLeft)
+  public void setLocation(final Point baselineLeft)
   {
     this.location = baselineLeft;
   }
@@ -85,7 +85,7 @@ public class TextContent implements SimpleContent
    * 
    * @param text The text
    */
-  public void setText(String text)
+  public void setText(final String text)
   {
     this.text = text;
   }
