@@ -8,6 +8,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
 
+import Components.Platform;
 import Components.Spike;
 import app.JApplication;
 import auditory.sampled.BufferedSound;
@@ -96,7 +97,7 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     VisualizationView stageView = stage.getView(); 
     stageView.setBounds(0, 0, WIDTH, HEIGHT);
     stageView.addKeyListener(b);
-    /**
+
     Platform platform = new Platform(700, 600, b);
     stage.add(platform);
     Platform platform1 = new Platform(300, 600, b);
@@ -128,14 +129,19 @@ public class BizarreAdventuresApplication extends JApplication implements Action
     b.addAntagonist(platform7);
     b.addAntagonist(platform8);
     b.addAntagonist(platform9);
-    */
     
     Spike spike1 = new Spike (825, 700, b);
     stage.add(spike1);
+    
+    Spike spike2 = new Spike (850, 700, b);
+    stage.add(spike2);
+    
+    Spike spike3 = new Spike (800, 700, b);
+    stage.add(spike3);
  
     Zombie zombie = new Zombie(b, stage);
     stage.add(zombie);
-    b.addAntagonist(zombie); 
+    b.addAntagonist(zombie);
     
     if (b.checkDead())
     {

@@ -28,7 +28,10 @@ public class Zombie extends RuleBasedSprite
 {
 	
   private static final String RESOURCE_PATH = "/resources";
-	private static final int SPEED = 5;
+  private static final int DAMAGE = 1;
+  private static final int DAMAGE_COOLDOWN = 1000;
+  private static final int SPEED = 5;
+  private long lastDamageTime = 0;
 	private int maxX = 1920;
 	private Content content1;
 	private Content content2;
@@ -37,9 +40,7 @@ public class Zombie extends RuleBasedSprite
 	private BufferedImage zombie = null;
 	private BufferedImage leftZombie = null;
 	private Bernie b;
-	private Stage stage;
-	private int spawnCounter = 0;
-	
+	private Stage stage;	
 	/**
 	 * Zombie constructor being passed the stage and Bernie in application.
 	 *
@@ -100,7 +101,15 @@ public class Zombie extends RuleBasedSprite
 	@Override
 	public void handleTick(final int arg0) 
 	{
-		if (content1.getBounds2D().intersects(b.getBounds2D())) b.isDead();
+		if (this.getBounds2D().intersects(b.getBounds2D())) 
+		{
+		  long currTime = System.currentTimeMillis();
+		  if (currTime - lastDamageTime >= DAMAGE_COOLDOWN)
+		  {
+		    b.takeDamage(DAMAGE);
+		    lastDamageTime = currTime;
+		  }
+		}
 		updateLocation();
 	}
 	
@@ -135,8 +144,7 @@ public class Zombie extends RuleBasedSprite
 	public boolean die()
 	{
 	  stage.remove(this);
-	  if (spawnCounter < 5) spawnZombie();
-	  spawnCounter++;
+	  spawnZombie();
 	  return true;
 	}
 	

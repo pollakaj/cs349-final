@@ -38,8 +38,10 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private static final int SPEED = 11;
   private static final double GRAVITY = 4.0;
   private static final double INIT_JUMP_SPD = -50.0;
+  private static final int MAX_HEALTH = 10;
   private static final String RESOURCE_PATH = "/resources";
-  
+
+  private int health = MAX_HEALTH;
   private Content content1;
   private Content leftContent;
   private ResourceFinder finder;
@@ -68,6 +70,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   private Content content4;
   private Content content5;
   private boolean slicing;
+  private boolean currSlicing;
   private Stage stage;
 
   /**
@@ -207,9 +210,10 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     }
     if (code == KeyEvent.VK_X)
     {
-      if (!isSlicing())
+      if (!isSlicing() && !currSlicing)
       {
         setSlicing(true);
+        currSlicing = true;
         performSlice();
       }
     }
@@ -220,12 +224,13 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
    */
   private void performSlice()
   {
+    Content slice1Img = facingLeft ? content4 : content2;
+    Content slice2Img = facingLeft ? content5 : content3;
     Timer timer1 = new Timer(0, new ActionListener() 
     {
       public void actionPerformed(final ActionEvent e)
       {
-        if (facingLeft) content = content4;
-        else content = content2;
+        content = slice1Img;
       }
     });
     timer1.setRepeats(false);
@@ -235,8 +240,7 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     {
       public void actionPerformed(final ActionEvent e)
       {
-        if (facingLeft) content = content5;
-        else content = content3;
+        content = slice2Img;
       }
     });
     timer2.setRepeats(false);
@@ -246,22 +250,23 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     {
       public void actionPerformed(final ActionEvent e)
       {
-        if (facingLeft) content = leftContent;
-        else content = content1;
+        content = facingLeft ? leftContent : content1;
         for (Sprite zombie : antagonists)
         {
-          if (zombie instanceof Zombie)
+          if (zombie instanceof Zombie && ((Zombie) zombie).getBounds2D().intersects(getBounds2D()))
           {
             ((Zombie) zombie).checkSliced();
             if (((Zombie) zombie).die()) killCounter++;
           }
         }
         setSlicing(false);
+        currSlicing = false;
       }
     });
     timer3.setRepeats(false);
     timer3.start();
-    if (killCounter == 1) victory();
+    
+    if (killCounter == 5 && !didWin) victory();
   }
   
   /**
@@ -302,8 +307,16 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
     prevX = getX();
     prevY = getY();
 
-    if (movingLeft) this.x -= SPEED;
-    if (movingRight) this.x += SPEED;
+    if (movingLeft) 
+    {
+      facingLeft = true;
+      this.x -= SPEED;
+    }
+    if (movingRight) 
+    {
+      facingLeft = false;
+      this.x += SPEED;
+    }
     
     if (this.x <= 0) x = 1919;
     
@@ -446,6 +459,27 @@ public class Bernie extends RuleBasedSprite implements KeyListener, ActionListen
   public boolean didWin() 
   {
     return this.didWin;
+  }
+  
+  /**
+   * Getter for Bernie's health.
+   *
+   * @return int to check Bernie's Health amount
+   */
+  public int getHealth() 
+  {
+    return this.health;
+  }
+  
+  /**
+   * Method to decrease the health.
+   *
+   * @param damage int amount of damage received from a zombie
+   */
+  public void takeDamage(final int damage)
+  {
+    health -= damage;
+    if (health <= 0) isDead();
   }
   
   /**

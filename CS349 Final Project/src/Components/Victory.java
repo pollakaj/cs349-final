@@ -1,5 +1,8 @@
 package Components;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -7,8 +10,9 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
+
 import app.JApplication;
-import bizarreAdventures.BizarreAdventuresApplication;
+import helpers.TextContent;
 import io.ResourceFinder;
 import resources.Marker;
 import visual.VisualizationView;
@@ -51,9 +55,7 @@ public class Victory extends JApplication implements KeyListener, ActionListener
     int code = e.getKeyCode();
     if (code == KeyEvent.VK_SPACE)
     {
-      new BizarreAdventuresApplication(args).run();
-      stop();
-      destroy();
+      stopGame();
     }
     if (code == KeyEvent.VK_ESCAPE)
     {
@@ -75,10 +77,15 @@ public class Victory extends JApplication implements KeyListener, ActionListener
     ContentFactory factory = new ContentFactory(rf);
     
     Content background = factory.createContent("Untitled design.png", 3, false);
-    background.setScale(3);
+    TextContent victoryTxt = new TextContent("VICTORY!", new Point(100, 100));
+    
+    victoryTxt.setColor(Color.GREEN);
+    victoryTxt.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
     
     stage = new Stage(50);
     stage.add(background);
+    stage.add(victoryTxt);
+    
     VisualizationView stageView = stage.getView(); 
     stageView.setBounds(0, 0, 1920, 1080);
     stageView.addKeyListener(this);
@@ -93,6 +100,15 @@ public class Victory extends JApplication implements KeyListener, ActionListener
   {
     // TODO Auto-generated method stub
     
+  }
+  
+  /**
+   * Method to stop the game from running.
+   */
+  private void stopGame()
+  {
+    stage.stop();
+    destroy();
   }
 
 }
